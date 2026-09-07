@@ -1,83 +1,50 @@
-import { getBasicUser } from '@/helpers/dataFetcherClient'
-import { SimpleUserData } from '@/interfaces/fetchers'
+"use client";
+
 import { Avatar, Menu, MenuDropdown, MenuTarget, Skeleton } from '@mantine/core'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { UserCircle, Logout  } from "@mynaui/icons-react";
+import { UserCircle, Logout } from "@mynaui/icons-react";
 import { useRouter } from 'next/navigation'
-
-
+import { useAppState } from '@/app/providers/StateProvider'
 
 const UserAvatar = () => {
-    const [userData, setUserData] = useState<SimpleUserData | null>()
-    const [fetchState, setFetchState] = useState({loading: true, error: false})
+    const user = useAppState((state) => state.user)
+    const logout = useAppState((state) => state.logout)
     const router = useRouter()
-
-    const handleCall = useCallback( async ()=> {
-        setFetchState({error: false, loading: true})
-        
-        const user = await getBasicUser()
-        if(!user.isSuccess) {
-            setFetchState({error: true, loading: false})
-            return
-        }
-        setUserData(user?.data ?? null)
-        setFetchState({error: false, loading: false})
-        return
-
-    },[])
-
-    useEffect(()=>{
-        handleCall()
-    },[handleCall])
-
     const logoutFn = () => {
+        logout()
         document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
         router.push('/login')
     }
 
+    if (!user?.user_uid) {
+        return <Skeleton height={37} circle />
+    }
 
-    if(fetchState.loading) {
-        return <Skeleton height={37} circle/>
-    }
-    if(fetchState.error) {
-        return (
-            <Avatar 
-                color="red"
-                name={'!'}
-                alt='Error'
-                variant='outline'
-            />
-        )
-
-    }
-    if(userData) {
-        return (
-            <Menu>
-                <MenuTarget>
-                    <Avatar 
-                        color='accent-pitz'
-                        name={userData.email}
-                        alt={userData.email}
-                        variant='light'
-                    />
-                </MenuTarget>
-                <MenuDropdown>
-                    <Menu.Label>{userData.email}</Menu.Label>
-                    <Menu.Item
-                        component={Link}
-                        href={'/dashboard/my-account'}
-                        leftSection={<UserCircle/>}
-                    >
-                        Mi cuenta
-                    </Menu.Item>
-                    <Menu.Item onClick={logoutFn} leftSection={<Logout/>}>
-                        Cerrar sesión
-                    </Menu.Item>
-                </MenuDropdown>
-            </Menu>
-        )
-    }
+    return (
+        <Menu>
+            <MenuTarget>
+                <Avatar
+                    // color='accent-pitz'
+                    name={user.email}
+                    alt={user.email}
+                    variant='light'
+                />
+            </MenuTarget>
+            <MenuDropdown>
+                <Menu.Label>{user.email}</Menu.Label>
+                <Menu.Item
+                    component={Link}
+                    href={'/dashboard/my-account'}
+                    leftSection={<UserCircle />}
+                >
+                    Mi cuenta
+                </Menu.Item>
+                <Menu.Item onClick={logoutFn} leftSection={<Logout />}>
+                    Cerrar sesión
+                </Menu.Item>
+            </MenuDropdown>
+        </Menu>
+    );
 }
 
 export default UserAvatar

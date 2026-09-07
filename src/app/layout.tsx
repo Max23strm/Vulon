@@ -10,6 +10,8 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
 import MantineMainProvider from "./providers/MantineMainProvider";
+import StateProvider from "./providers/StateProvider";
+import { getServerSession } from "./providers/serverSession";
 import { NextIntlClientProvider } from "next-intl";
 
 
@@ -18,15 +20,16 @@ import { NextIntlClientProvider } from "next-intl";
 export const instant = false;
 
 export const metadata = {
-  title: "Pitz rugby club",
-  description: "Club de rugby Cancún",
+  title: "Vulon team management",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+
   return (
     <html lang="es" {...mantineHtmlProps}>
       <head>
@@ -38,8 +41,10 @@ export default function RootLayout({
       <body>
         <NextIntlClientProvider>
           <MantineMainProvider>
-            <Notifications/>
-            {children}
+            <StateProvider initialState={session}>
+              <Notifications/>
+              {children}
+            </StateProvider>
           </MantineMainProvider>
         </NextIntlClientProvider>
       </body>

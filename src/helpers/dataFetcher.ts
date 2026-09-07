@@ -233,24 +233,19 @@ export const getUser =  async () : Promise<UserResponse> => {
 
     const base64Url = authToken?.split('.')[1]
     const base64 = base64Url?.replace(/-/g, '+').replace(/_/g, '/') ?? '';
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
+    const jsonPayload = Buffer.from(base64, 'base64').toString('utf-8');
     const payload = JSON.parse(jsonPayload)
     const user_uid = payload.sub
 
     try {
         const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "users/" +  user_uid, {
-            cache:'no-store', 
+            cache:'no-store',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`,
             },
         }, )
-        
+
         const result = await response.json();
 
         if(!result.isSuccess){

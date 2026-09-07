@@ -20,12 +20,14 @@
     "@next/env": "16.3.4",
     "chroma-js": "^3.1.2",
     "dayjs": "^1.11.13",
+    "iron-session": "^9.0.1",
     "motion": "^12.23.0",
     "next": "16.3.4",
     "next-intl": "^4.14.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

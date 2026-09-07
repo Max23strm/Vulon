@@ -14,9 +14,13 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useAppState } from "@/app/providers/StateProvider";
+import { getUser } from "@/helpers/dataFetcher";
+import { CompleteUserData } from "@/interfaces/fetchers";
 
 const LoginCard = () => {
     const t = useTranslations('Authentication');
+    const setUser = useAppState((state) => state.setUser)
     const router = useRouter()
     const form = useForm({
         mode: 'uncontrolled',
@@ -34,28 +38,43 @@ const LoginCard = () => {
     type FormValues = typeof form.values;
 
     const handleLoing = async (values : FormValues) => {
-        setIsValidating(true)
-        const response = await postLogin(values)
-        
-        if(!response.isSuccess) {
-            notifications.show({
-                title: t('error_loggin_in'),
-                message: t('validate_credentials'),
-                color: 'red'
-            })
-            setIsValidating(false)
-        } else {
-            const expiration = new Date(response.expiration);
-            document.cookie = `authToken=${
-                response.token
-            };expires=${expiration.toUTCString()};path=/`
+        try{
 
+            setIsValidating(true)
+            const response = await postLogin(values)
+            
+            if(!response.isSuccess) throw new Error('Error login in')
+                
+            
+            const expiration = new Date(response.expiration);
+            document.cookie = `authToken=${ response.token };expires=${expiration.toUTCString()};path=/`
+
+            
+            const userRes = await getUser()
+            if(!userRes.isSuccess) throw new Error('Error login in')
+            const user = userRes.data as CompleteUserData
+            setUser({
+                email:user?.email,
+                first_name:user?.first_name,
+                last_name:user?.last_name,
+                user_uid:user?.user_uid,
+                username:user?.username,
+            })
             notifications.show({
                 message: t('loged_successfully'),
                 color: 'green'
             })
 
             router.push("/dashboard/home")
+            setIsValidating(false)
+            
+        } catch(e ){
+            notifications.show({
+                title: t('error_loggin_in'),
+                message: t('validate_credentials'),
+                color: 'red'
+            })
+            setIsValidating(false)
         }
 
     }
