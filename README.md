@@ -1,4 +1,4 @@
-# Pitz — Frontend
+# Vulon — Frontend
 
 Aplicación web frontend de **Pitz**, construida con Next.js 15 (App Router) y React 19. Incluye autenticación, dashboard y módulos de gestión (jugadores, reportes, pagos, eventos, etc.) con UI basada en Mantine y gráficos con Recharts.
 

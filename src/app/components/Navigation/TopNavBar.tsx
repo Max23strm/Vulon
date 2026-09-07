@@ -5,9 +5,7 @@ import { Burger, NavLink } from "@mantine/core";
 import styles from "@/app/components/styles/appshell.module.css";
 import ThemeSwitcher from "./ThemeSwitcher";
 import UserAvatar from "./UserAvatar";
-import { defineActive, navElements } from "@/app/utils/navigation";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { navElements } from "@/app/utils/navigation";
 import TopNavigationLink from "./TopNavigationLink";
 
 const TopNavBar = ({
@@ -17,9 +15,6 @@ const TopNavBar = ({
   opened: boolean;
   onClick: () => void;
 }) => {
-  const pathname = usePathname();
-
-  const t = useTranslations("Navigation");
 
   return (
     <>
