@@ -27,6 +27,7 @@
         "log_in": "Log in",
         "i_forgot_password": "Forgot my password",
         "error_loggin_in" : "Error logging in",
-        "validate_credentials" : "Validate your credentials"
+        "validate_credentials" : "Validate your credentials",
+        "select_entity":"Select the entity you would like to access"
     }
 }

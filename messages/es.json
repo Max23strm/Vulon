@@ -27,6 +27,7 @@
         "log_in": "Iniciar sesión",
         "i_forgot_password": "Olvidé mi contraseña",
         "error_loggin_in" : "Error iniciando sesión",
-        "validate_credentials" : "Valide sus credenciales"
+        "validate_credentials" : "Valide sus credenciales",
+        "select_entity":"Selecciona la entidad a la que te gustaria acceder"
     }
 }
