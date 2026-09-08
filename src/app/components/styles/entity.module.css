@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.entity_card {
+    max-width: 400px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    user-select: none;
+}
+
+.entity_card .entity_card_image_section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+.entity_card .entity_card_text_section {
+    max-width: 400px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.entity_card .entity_card_text_section h3{
+    text-align: center;
+    pointer-events: none;
+}
+.entity_card .entity_card_text_section div{
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+.entity_card .entity_card_text_section p{
+    pointer-events: none;
+    margin: 0;
+}

@@ -65,7 +65,7 @@ const LoginCard = () => {
                 color: 'green'
             })
 
-            router.push("/dashboard/home")
+            router.push("/entity-selector")
             setIsValidating(false)
             
         } catch(e ){

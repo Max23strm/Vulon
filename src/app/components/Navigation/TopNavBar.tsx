@@ -7,7 +7,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import UserAvatar from "./UserAvatar";
 import { navElements } from "@/app/utils/navigation";
 import TopNavigationLink from "./TopNavigationLink";
-
+import VulonLogo from '@public/Vulon.svg'
 const TopNavBar = ({
   opened,
   onClick,
@@ -26,8 +26,14 @@ const TopNavBar = ({
         className={styles.menu_button}
       />
 
-      <Link href={"/dashboard/home"}>
-        <Image src={PitzLogo} width={50} height={50} alt="pitzLogo" />
+      <Link href={"/entity-selector"}>
+
+        <Image
+            src={VulonLogo}
+            width={50}
+            height={50}
+            alt={'Vulon logo'}
+        />
       </Link>
 
       <div className={styles.nav_line}>
