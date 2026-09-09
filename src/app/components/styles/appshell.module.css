@@ -51,18 +51,20 @@
     background-color: transparent;
 
   --grad-angle: 370deg;
-  --grad-c1: var(--mantine-color-gray-0);
-  --grad-c2: #aae9f1;
-  --grad-c3: #88e6f3;
-
-  background: linear-gradient(
+  --grad-c1: transparent;
+  --grad-c2: transparent;
+  --grad-c3: transparent;
+  background: linear-gradient(var(--grad-angle), var(--grad-c1), var(--mantine-color-body) 35%);
+  /* background: linear-gradient(
     var(--grad-angle),
-    color-mix(in srgb, var(--grad-c1) 100%, transparent) 0%,
-    color-mix(in srgb, var(--grad-c2) 60%, transparent) 8%,
-    color-mix(in srgb, var(--grad-c3) 60%, transparent) 13%,
-    color-mix(in srgb, var(--grad-c2) 60%, transparent) 18%,
+    color-mix(in srgb, var(--grad-c1) 170%, transparent) 0%,
+    var(--mantine-color-body) 20%,
+    var(--grad-c2) 20.5%,
+    var(--mantine-color-body) 21%,
+    var(--grad-c3) 21.5%,
+    color-mix(in srgb, var(--mantine-color-body) 100%, transparent) 22%,
     rgba(237, 152, 83, 0) 28%
-  );
+  ); */
 
   transition: 
     --grad-angle 0.6s ease,
@@ -73,9 +75,6 @@
 
 :global([data-mantine-color-scheme="dark"]) .main_section_decoration {
   --grad-angle: 297deg;
-  --grad-c1: var(--mantine-color-dark-8);
-  --grad-c2: #943d04;
-  --grad-c3: #fb7214;
 }
 
 

@@ -1,6 +1,7 @@
+'use client'
 import { formatCurrency } from '@/helpers/numberFormaters';
 import { UpcomingEvent } from '@/interfaces/home'
-import { Card, Group, Stack, Text } from '@mantine/core'
+import { Card, Group, Stack, Text, useMantineTheme } from '@mantine/core'
 import { CalendarCheck, Dollar,  UsersGroup, ChevronDownLeft, ChevronUpRight } from "@mynaui/icons-react";
 import dayjs from '@/helpers/dayjs'
 import styles from './Card.module.css'
@@ -29,6 +30,8 @@ interface EventCardProps {
 type Props = AmountCardProps | PlayersCardProps | EventCardProps;
 
 const StandardCard = ({ type, data }: Props) => {
+    const {colors, primaryColor} = useMantineTheme();
+
     if(type === 'event' && data === null) {
         return <Link href="/dashboard/organization/events" className={stylesDefault.link_deco}>
             <Card
@@ -37,7 +40,7 @@ const StandardCard = ({ type, data }: Props) => {
                 className={styles.mainCard}
             >
                 <Text>Sin eventos programados</Text>
-                <CalendarCheck className={styles.heroIcon} size={'100px'} color='#0C5C7A'/>
+                <CalendarCheck className={styles.heroIcon} size={'100px'} color={colors[primaryColor][8]}/>
             </Card>
         </Link>
     }
@@ -62,7 +65,7 @@ const StandardCard = ({ type, data }: Props) => {
                             <Text c="dimmed" size='sm'>{location}</Text>
                         </Stack>
                     </Stack>
-                    <CalendarCheck className={styles.heroIcon} size={'100px'} color='#0C5C7A'/>
+                    <CalendarCheck className={styles.heroIcon} size={'100px'} color={colors[primaryColor][8]}/>
                 </Group>
             </Card>
         </Link>
@@ -114,7 +117,7 @@ const StandardCard = ({ type, data }: Props) => {
                         }
                     </Stack>
                 </Group>
-                <Dollar className={styles.heroIcon} size={'100px'} color='#0C5C7A'/>
+                <Dollar className={styles.heroIcon} size={'100px'} color={colors[primaryColor][8]}/>
             </Card>
         )
 
@@ -134,7 +137,7 @@ const StandardCard = ({ type, data }: Props) => {
                                 <Text size="lg" >{data}</Text>
                             </Stack>
                         </Stack>
-                        <UsersGroup className={styles.heroIcon} size={'100px'} color='#0C5C7A'/>
+                        <UsersGroup className={styles.heroIcon} size={'100px'} color={colors[primaryColor][8]}/>
                     </Group>
                 </Card>
             </Link>

@@ -1,8 +1,9 @@
 'use client'
 import EntityCard from '@/app/components/entityComponents/EntityCard';
+import { EntityAssigned } from '@/interfaces/requests/entities';
 import { Carousel, CarouselSlide } from '@mantine/carousel';
 
-const EntityCarrousel = () => {
+const EntityCarrousel = ({entities}:{entities:EntityAssigned[]}) => {
     return (
         <Carousel
             withIndicators
@@ -11,24 +12,14 @@ const EntityCarrousel = () => {
             slideGap={{ base: 0, sm: 'md' }}
             emblaOptions={{ loop: true, align: 'center' }}
         >
-            <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide>
-             <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide>
-            {/* <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide>
-            <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide>
-            <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide>
-            <CarouselSlide>
-                <EntityCard/>
-            </CarouselSlide> */}
+            {
+                entities.map( e => (
+                    <CarouselSlide  key={`${e.entity_uid}`}>
+                        <EntityCard entity={e}/>
+                    </CarouselSlide>
+
+                ))
+            }
         </Carousel>
     )
 }

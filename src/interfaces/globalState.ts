@@ -15,8 +15,11 @@ export interface UserSlice {
 }
 
 export interface EntitySlice {
-    entity_uid: string
-    colors: string[]
-    name: string,
-    short_name: string
+    entity_uid:    string;
+    name:          string;
+    logo:          string;
+    short_name:    string;
+    country_code:  string;
+    currency_code: string;
+    colors:        string[];
 }

@@ -1,9 +1,9 @@
-import { homeFetch } from "@/helpers/dataFetcher";
 import { Alert, Container, Grid, GridCol, Text } from "@mantine/core";
 import { DangerOctagon } from "@mynaui/icons-react";
 import dayjs from '@/helpers/dayjs'
 import StandardCard from "../../components/homeComponents/StandardCard";
 import { connection } from "next/server";
+import { homeFetch } from "@/helpers/dataFetcher";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components

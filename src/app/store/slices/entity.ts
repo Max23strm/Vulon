@@ -5,7 +5,10 @@ export const entityInitialState: EntitySlice = {
     entity_uid: '',
     colors: [],
     name: '',
-    short_name: ''
+    short_name: '',
+    country_code: '',
+    currency_code:'',
+    logo: ''
 }
 
 export const createEntitySlice: StateCreator<
