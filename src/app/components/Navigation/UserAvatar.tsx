@@ -12,8 +12,6 @@ const UserAvatar = () => {
     const router = useRouter()
     const path = usePathname()
 
-    console.log(path)
-
     const logoutFn = () => {
         logout()
         document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"

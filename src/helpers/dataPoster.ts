@@ -44,7 +44,6 @@ export const postExpensesForm = async (formValues: expenses) => {
             body: JSON.stringify({...formValues, registered_by: user_uid}),
         })
         const result = await response.json();
-        console.log(result)
         return result
 
     } catch(e) {

@@ -12,6 +12,10 @@
     justify-content: center;
     gap: 3rem;
     user-select: none;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: border-color .2s ease-in;
+    background: linear-gradient(185deg, var(--mantine-color-indigo-filled) 0%, var(--mantine-color-body) 75%)
 }
 
 .entity_card .entity_card_image_section {

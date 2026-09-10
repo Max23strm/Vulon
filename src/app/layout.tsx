@@ -42,12 +42,12 @@ export default async function RootLayout({
       </head>
       <body>
         <NextIntlClientProvider>
-          <MantineMainProvider>
             <StateProvider initialState={session}>
-              <Notifications/>
-              {children}
+              <MantineMainProvider>
+                  <Notifications/>
+                  {children}
+              </MantineMainProvider>
             </StateProvider>
-          </MantineMainProvider>
         </NextIntlClientProvider>
       </body>
     </html>

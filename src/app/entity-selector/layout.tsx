@@ -8,7 +8,8 @@ export default function EnityLayout({ children }: { children: React.ReactNode;})
               header={{ height: 60 }}
               withBorder={false}
               padding="md"
-            >
+            //   className={styles.main_background}
+        >
                 <span className={styles.main_section_decoration}></span>
                 <AppShellHeader className={styles.header_con_logo}>
                     <BasicNavbar/>
