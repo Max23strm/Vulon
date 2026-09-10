@@ -31,6 +31,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       }}
       withBorder={false}
       padding="md"
+      // className={styles.main_background}
     >
       <span className={styles.main_section_decoration} style={decorationStyle}></span>
       <AppShellHeader className={styles.header_con_logo}>
