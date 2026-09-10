@@ -16,7 +16,7 @@ const EntityPage = async () => {
     return (
         <section className={styles.container}>
             <Title>{t('select_entity')}</Title>
-            <EntityCarrousel entities={entitiesRes.data}/>
+            <EntityCarrousel entities={entitiesRes.data ?? []}/>
         </section>
     )
 }

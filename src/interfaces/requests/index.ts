@@ -1,5 +1,5 @@
 export interface StandardResponseData<T> {
-    data: T
+    data: T | null
     message?: string
     success: boolean
     error?: any

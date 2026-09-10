@@ -25,6 +25,5 @@ const sessionOptions: SessionOptions = {
 
 export async function getSession(): Promise<IronSession<SessionData>> {
     const cookieStore = await cookies()
-    console.log(process.env.SESSION_SECRET)
     return getIronSession<SessionData>(cookieStore, sessionOptions)
 }

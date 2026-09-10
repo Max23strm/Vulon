@@ -8,7 +8,7 @@ const EntityCarrousel = ({entities}:{entities:EntityAssigned[]}) => {
         <Carousel
             withIndicators
             height={500}
-            slideSize={{ base: '100%', sm: '50%', md: '33.333333%' }}
+            slideSize={{ base: '100%', sm: '50%', md: '33.333333%', lg:'25%' }}
             slideGap={{ base: 0, sm: 'md' }}
             emblaOptions={{ loop: true, align: 'center' }}
         >

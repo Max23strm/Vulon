@@ -42,12 +42,11 @@ const LoginCard = () => {
 
             setIsValidating(true)
             const response = await postLogin(values)
-            
-            if(!response.isSuccess) throw new Error('Error login in')
+            if(!response.success) throw new Error('Error login in')
                 
             
-            const expiration = new Date(response.expiration);
-            document.cookie = `authToken=${ response.token };expires=${expiration.toUTCString()};path=/`
+            const expiration = new Date(response.data.expiration);
+            document.cookie = `authToken=${ response.data.token };expires=${expiration.toUTCString()};path=/`
 
             
             const userRes = await getUser()

@@ -3,7 +3,7 @@ import { DangerOctagon } from "@mynaui/icons-react";
 import dayjs from '@/helpers/dayjs'
 import StandardCard from "../../components/homeComponents/StandardCard";
 import { connection } from "next/server";
-import { homeFetch } from "@/helpers/dataFetcher";
+import { fetchHomeDashboard } from "@/app/requests/dashboard";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -11,12 +11,12 @@ export const instant = false;
 export default async function Home() {
   await connection()
   const currentDate = dayjs().format("YYYY-MM-DD")
-  const { data, errors, isSuccess } = await homeFetch(currentDate);
+  const { data, error, success } = await fetchHomeDashboard(currentDate);
   
-  if (!isSuccess) {
+  if (!success) {
     return (
       <Alert variant="light" color="red" title="Error obteniendo información" withCloseButton={false} icon={<DangerOctagon />}>
-        {errors.home}
+        {error.home}
       </Alert>
     );
   }
