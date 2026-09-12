@@ -9,6 +9,7 @@ export interface SessionData {
     colors?: string[],
     user_id?: string,
     entity_name?: string,
+    entity_uid?: string,
 }
 
 const isProd = process.env.NODE_ENV === 'production'

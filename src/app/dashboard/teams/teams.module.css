@@ -1,0 +1,94 @@
+@property --grad-c1 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: transparent;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.link {
+    text-decoration: none;
+    width: 100%;
+}
+.card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 110px;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+        var(--grad-angle),
+        var(--grad-c1),
+        var(--mantine-color-body) 35%
+    );
+    transform: translateY(100%);
+    transition: all 0.4s ease;
+}
+
+.card:hover {
+    border-color: var(--grad-c1);
+}
+.card:hover::before {
+    transform: translateY(0);
+}
+
+:global([data-mantine-color-scheme="dark"]) .card::before {
+    background: linear-gradient(
+        var(--grad-angle),
+        var(--grad-c1),
+        var(--mantine-color-dark-6) 35%
+    );
+}
+
+.card > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+.card .section{
+    margin-inline: unset;
+    margin-block: unset;
+}
+.card .section:first-child{
+    display: flex;
+    width: 20%;
+    align-items: center;
+    justify-content: center;
+}
+.card .section:not(:first-child){
+    display: flex;
+    flex-direction: column;
+    gap:.3rem
+}
+
+.card .section .category_container{
+    display: flex;
+    flex-direction: row;
+    gap:.3rem
+}
+
+
+@media screen and (min-width: 788px) {
+    .container{
+        flex-direction: row;
+    }
+    .link{
+        width: fit-content;
+    }
+    .card{
+        min-width: 350px;
+    }
+}

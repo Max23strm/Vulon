@@ -7,15 +7,17 @@ import {
 import { DangerOctagon } from "@mynaui/icons-react";
 import Link from "next/link";
 import PlayerTable from "./components/PlayerTable";
+import { getAllPlayers } from "@/app/requests/players";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 
 const page = async () => {
-  const { players, errors, isSuccess } = await playersGeneralFetch();
 
-  if (!isSuccess) {
+  const { data, error, success } = await getAllPlayers();
+
+  if (!success) {
     return (
       <Stack
         bg="var(--mantine-color-body)"
@@ -38,13 +40,13 @@ const page = async () => {
           withCloseButton={false}
           icon={<DangerOctagon />}
         >
-          {errors}
+          {error}
         </Alert>
       </Stack>
     );
   }
 
-  return <PlayerTable players={players} />
+  return <PlayerTable players={data} />
 
 };
 
