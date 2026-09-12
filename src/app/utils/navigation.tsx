@@ -14,6 +14,11 @@ export const navElements: NavElement[] = [
         children: [],
     },
     {
+        name: "teams",
+        href: "/dashboard/teams",
+        children: [{ name: "all", href: "/dashboard/teams", icon: <UsersGroup size={16} stroke={1.5} />, }],
+    },
+    {
         name: "players",
         href: "/dashboard/players",
         children: [{ name: "all", href: "/dashboard/players", icon: <UsersGroup size={16} stroke={1.5} />, }],

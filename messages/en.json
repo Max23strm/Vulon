@@ -1,13 +1,14 @@
 {
     "Navigation":{
-        "home": "Home",
-        "players": "Players",
-        "all": "All",
         "admin": "Administration",
-        "income": "Income",
+        "all": "All",
+        "events": "Events",
         "expenses": "Outflows / Expenses",
+        "home": "Home",
+        "income": "Income",
         "organization": "Organization",
-        "events": "Events"
+        "players": "Players",
+        "teams": "Equipos"
     },
     "Alerts":{
         "not_found_title":"Page not found",
@@ -29,5 +30,8 @@
         "error_loggin_in" : "Error logging in",
         "validate_credentials" : "Validate your credentials",
         "select_entity":"Select the entity you would like to access"
+    },
+    "Teams": {
+        "players_assigned" : "{count, plural,  =0 {No players assigned} =1 {Player assigned} other {Playeres assigned} }"
     }
 }
