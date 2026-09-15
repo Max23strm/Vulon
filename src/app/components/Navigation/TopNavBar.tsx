@@ -31,16 +31,16 @@ const TopNavBar = ({
           <Image src={entity.logo ? entity.logo : VulonLogo} width={50} height={50} />
         </Link>
 
-        <div className={styles.nav_line}>
+        {/* <div className={styles.nav_line}>
           {navElements.map((nav, i) => {
             return <TopNavigationLink navElem={nav} key={`top-nav-${i}`} />;
           })}
-        </div>
+        </div> */}
 
-        <div className={styles.header_group}>
+        {/* <div className={styles.header_group}>
           <ThemeSwitcher />
           <UserAvatar />
-        </div>
+        </div> */}
       </>
     );
 };

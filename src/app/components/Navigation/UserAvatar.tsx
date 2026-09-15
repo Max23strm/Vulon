@@ -1,10 +1,11 @@
 "use client";
 
-import { Avatar, Menu, MenuDropdown, MenuTarget, Skeleton } from '@mantine/core'
+import { Avatar, Menu, MenuDropdown, MenuTarget, Skeleton, Text } from '@mantine/core'
 import Link from 'next/link'
 import { UserCircle, Logout } from "@mynaui/icons-react";
 import { usePathname, useRouter } from 'next/navigation'
 import { useAppState } from '@/app/providers/StateProvider'
+import styles from '@/app/components/styles/appshell.module.css'
 
 const UserAvatar = () => {
     const user = useAppState((state) => state.user)
@@ -25,12 +26,15 @@ const UserAvatar = () => {
     return (
         <Menu>
             <MenuTarget>
-                <Avatar
-                    color='grape'
-                    name={user.email}
-                    alt={user.email}
-                    variant='light'
-                />
+                <div className={styles.avatar_group}>
+                    <Avatar
+                        color='entityPrimary'
+                        name={user.email}
+                        alt={user.email}
+                        variant='light'
+                    />
+                    <Text>{user.first_name}</Text>
+                </div>
             </MenuTarget>
             <MenuDropdown>
                 <Menu.Label>{user.email}</Menu.Label>
