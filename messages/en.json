@@ -8,7 +8,7 @@
         "income": "Income",
         "organization": "Organization",
         "players": "Players",
-        "teams": "Equipos"
+        "teams": "Teams"
     },
     "Alerts":{
         "not_found_title":"Page not found",

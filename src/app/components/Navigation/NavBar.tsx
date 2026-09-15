@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles/NavLink.module.css";
+import styles from "@/app/components/styles/appshell.module.css";
 import { NavLink } from "@mantine/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,6 +36,7 @@ function NavBar({ toogleClick }: { toogleClick: () => void }) {
               variant="subtle"
               label={t(e.name)}
               className={styles.button}
+              leftSection={e.icon}
               active={defineActive(e.href, pathname)}
             >
               {e.children.length &&
@@ -45,7 +46,6 @@ function NavBar({ toogleClick }: { toogleClick: () => void }) {
                     component={Link}
                     onClick={toogleClick}
                     variant="subtle"
-                    leftSection={child.icon}
                     className={styles.button}
                     active={defineActive(child.href, pathname)}
                     label={t(child.name)}

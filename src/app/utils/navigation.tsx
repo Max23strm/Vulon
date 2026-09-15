@@ -6,7 +6,7 @@ export type NavElement = {
     icon?: JSX.Element,
     children?:NavElement[]
 }
-
+ 
 export const navElements: NavElement[] = [
     {
         name: "home",
@@ -16,27 +16,31 @@ export const navElements: NavElement[] = [
     {
         name: "teams",
         href: "/dashboard/teams",
-        children: [{ name: "all", href: "/dashboard/teams", icon: <UsersGroup size={16} stroke={1.5} />, }],
+        icon: <UsersGroup size={16} stroke={1.5} />,
+        children: [{ name: "all", href: "/dashboard/teams",  }],
     },
     {
         name: "players",
         href: "/dashboard/players",
-        children: [{ name: "all", href: "/dashboard/players", icon: <UsersGroup size={16} stroke={1.5} />, }],
+        icon: <UsersGroup size={16} stroke={1.5} />,
+        children: [{ name: "all", href: "/dashboard/players",  }],
     },
     {
         name: "admin",
         href: "/dashboard/administration",
+        icon: <FolderTwo size={16} stroke={1.5} />,
         children: [
-        { name: "income", href: "/dashboard/administration/payments", icon: <FolderTwo size={16} stroke={1.5} />, },
-        { name: "expenses", href: "/dashboard/administration/expenses", icon: <FolderTwo size={16} stroke={1.5} />, },
+        { name: "income", href: "/dashboard/administration/payments",  },
+        { name: "expenses", href: "/dashboard/administration/expenses", },
         // { name: 'credentials', href: '/dashboard/administration/credentials' }
         ],
     },
     {
         name: "organization",
         href: "/dashboard/organization",
+        icon: <FolderKanban size={16} stroke={1.5} />,
         children: [
-        { name: "events", href: "/dashboard/organization/events", icon: <FolderKanban size={16} stroke={1.5} />, },
+        { name: "events", href: "/dashboard/organization/events",  },
         // { name: "Partidos", href: '/dashboard/organization/matches' },
         // { name: "Entrenamientos", href: '/dashboard/organization/trainings' }
         ],
