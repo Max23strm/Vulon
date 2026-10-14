@@ -18,8 +18,8 @@ const EntityCard = ({ entity }: { entity: EntityAssigned }) => {
     const handleClick = ( entity: EntityAssigned ) => {
         setEntity({
             colors: entity.colors,
-            country_code: entity.country_code,
-            currency_code: entity.currency_code,
+            country_code: entity.country_code.trim(),
+            currency_code: entity.currency_code.trim(),
             entity_uid: entity.entity_uid,
             logo: entity.logo,
             name: entity.name,

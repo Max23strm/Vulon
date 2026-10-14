@@ -38,3 +38,42 @@ export const getAllTeamsByEntity = async (entity_uid : string): StandardResponse
         };
     }
 };
+
+export const createNewTeam = async (entity_uid : string, description: string): StandardResponsePromise<string> => {
+
+    const cookieStore = await cookies()
+    const authToken = cookieStore.get('authToken')
+    try {
+        if(!entity_uid) throw new Error('Entity is required')
+        const teamsResponse = await Promise.resolve(
+            fetch(process.env.BASE_URL + '/api/' + `teams/new`, {
+                method: 'POST',
+                cache:'no-store', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({entity_uid, description}),
+            }, ),
+        );
+        
+        const teamRes = (await teamsResponse.json())
+        if(!teamRes.success)  throw new Error(teamRes.error)
+
+        const teams = teamRes?.data ?? []
+
+        return {
+            success: true,
+            data: teams,
+            error: null,
+        };
+    
+
+    } catch (err) {
+        return {
+            success: false,
+            error: `${err}`,
+            data: null,
+        };
+    }
+};
