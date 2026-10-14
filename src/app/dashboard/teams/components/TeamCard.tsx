@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { TeamRes } from "@/interfaces/teams";
 import {
   Badge,
@@ -12,47 +12,57 @@ import { UsersGroup } from "@mynaui/icons-react";
 import { useTranslations } from "next-intl";
 import styles from "../teams.module.css";
 import { stringToHexColor } from "@/app/utils/colorRandomizer";
-import Link from "next/link";
 import { useAppState } from "@/app/providers/StateProvider";
+import { useDisclosure } from "@mantine/hooks";
+import TeamModal from "./TeamModal";
 
 const TeamCard = ({ team }: { team: TeamRes }) => {
-const t = useTranslations("Teams");
+  const t = useTranslations("Teams");
 
-const entity = useAppState((state) => state.entity)
+  const entity = useAppState((state) => state.entity);
   const decorationStyle = {
-  "--grad-c1": entity.colors[0] || "transparent",
-} as React.CSSProperties;
+    "--grad-c1": entity.colors[0] || "transparent",
+  } as React.CSSProperties;
+
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Link href={`${team.team_uid}`} className={styles.link}>
-        <Card withBorder orientation="horizontal" className={styles.card} style={decorationStyle}>
+    <>
+      <TeamModal opened={opened} handleClose={close} team={team} entity={team.entity_uid} />
+      <Card
+        withBorder
+        orientation="horizontal"
+        className={styles.card}
+        style={decorationStyle}
+        onClick={open}
+      >
         <CardSection className={styles.section}>
-            <ThemeIcon
+          <ThemeIcon
             size={52}
             variant="gradient"
             gradient={{ from: "entityPrimary", to: "entitySecondary", deg: 90 }}
-            >
-            <UsersGroup size={52} stroke={2} />
-            </ThemeIcon>
+          >
+            <UsersGroup size={52} stroke={1} />
+          </ThemeIcon>
         </CardSection>
         <CardSection className={styles.section}>
-            <Title order={4}>{team.description}</Title>
-            <Text size="sm">{team.entity_name}</Text>
-            <Text size="sm">{`${team.players_assigned} ${t('players_assigned', {count: team.players_assigned})}`}</Text>
-            <div className={styles.category_container}>
+          <Title order={4}>{team.description}</Title>
+          <Text size="sm">{team.entity_name}</Text>
+          <Text size="sm">{`${team.players_assigned} ${t("players_assigned", { count: team.players_assigned })}`}</Text>
+          <div className={styles.category_container}>
             {team.categories.map((t, index) => (
-                <Badge
+              <Badge
                 variant="light"
-                color={stringToHexColor(t)}
+                color={stringToHexColor(t.name)}
                 key={`${index} ${team.team_uid}`}
-                >
-                {t}
-                </Badge>
+              >
+                {t.name}
+              </Badge>
             ))}
-            </div>
+          </div>
         </CardSection>
-        </Card>
-    </Link>
+      </Card>
+    </>
   );
 };
 

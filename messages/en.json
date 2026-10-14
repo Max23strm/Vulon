@@ -32,6 +32,27 @@
         "select_entity":"Select the entity you would like to access"
     },
     "Teams": {
-        "players_assigned" : "{count, plural,  =0 {No players assigned} =1 {Player assigned} other {Playeres assigned} }"
+        "players_assigned" : "{count, plural,  =0 {No players assigned} =1 {Player assigned} other {Playeres assigned} }",
+        "create_team" : "Create team",
+        "team_name_longer" : "Team's name should be longer",
+        "add_new_team" : "Add new team",
+        "not_created" : "Team not created",
+        "close" : "Close",
+        "new_category" : "New category",
+        "team_not_updated" : "Team not updated",
+        "team_updated" : "Team updated",
+        "delete_team" : "Delete team",
+        "add_new_category" : "Add a new category",
+        "category_name" : "Category name",
+        "category_name_form_placeholder" : "Insert new category name",
+        "categories" : "Categories",
+        "category_created" : "Category created",
+        "pick_value" : "Pick a value",
+        "save" : "Save",
+        "team_created" : "Team created",
+        "team_name" : "Team name",
+        "team_name_form_placeholder" : "Insert new team's name",
+        "create" : "Create",
+        "new_team" : "New team"
     }
 }

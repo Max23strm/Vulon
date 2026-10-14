@@ -6,5 +6,11 @@ export interface TeamRes {
     entity_uid:             string;
     players_assigned:       number;
     entity_name:            string;
-    categories:             string[];
+    categories:             {category_uid:string, name:string}[];
+}
+
+
+export interface TeamCategory {
+    category_uid:             string
+    description:              string
 }
