@@ -149,3 +149,38 @@ export const postAssignTeamCategoryClient = async (team_uid : string, categories
     }
 
 }
+
+export const postDeleteTeamClient = async (team_uid : string): StandardResponsePromise<string> => {
+
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+
+    try {
+        const deleteResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "teams/delete/" + team_uid, {
+            method: 'POST',
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+        })
+
+        const deleteRes = (await deleteResponse.json())
+        if(!deleteRes.success)  throw new Error(deleteRes.error)
+
+        return {
+            success: true,
+            data: null,
+            error: null,
+        };
+
+
+    } catch (e) {
+        return {
+            data:null,
+            success: false,
+            error: e
+        }
+    }
+
+}

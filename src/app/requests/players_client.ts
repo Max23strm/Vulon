@@ -1,13 +1,14 @@
 import { playersData } from "@/interfaces/players";
 import { StandardResponsePromise } from "@/interfaces/requests";
 
-export const getPlayersClient = async (): StandardResponsePromise<playersData[]> => {
+export const getPlayersClient = async (entity_uid: string): StandardResponsePromise<playersData[]> => {
 
     const cookies = document.cookie.split('; ');
     const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
 
     try {
-        const playersResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "players", {
+        if(!entity_uid) throw new Error('Enitity is required')
+        const playersResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "players/" + entity_uid, {
             cache: 'no-store',
             headers: {
                 'Content-Type': 'application/json',

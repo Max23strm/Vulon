@@ -8,6 +8,7 @@ import { DangerOctagon } from "@mynaui/icons-react";
 import Link from "next/link";
 import PlayerTable from "./components/PlayerTable";
 import { getAllPlayers } from "@/app/requests/players";
+import { getSession } from "@/app/services/cookies/serverSideStoring";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -15,7 +16,8 @@ export const instant = false;
 
 const page = async () => {
 
-  const { data, error, success } = await getAllPlayers();
+  const { entity_uid } = await getSession()
+  const { data, error, success } = await getAllPlayers(entity_uid);
 
   if (!success) {
     return (

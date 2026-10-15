@@ -5,19 +5,17 @@ import {
   Checkbox,
   Combobox,
   Group,
+  Text,
   TextInput,
   useCombobox,
 } from "@mantine/core";
 import classes from "./TransferList.module.css";
 import { ChevronRightWaves } from "@mynaui/icons-react";
-
-const fruits = ["🍎 Apples", "🍌 Bananas", "🍓 Strawberries"];
-
-const vegetables = ["🥦 Broccoli", "🥕 Carrots", "🥬 Lettuce"];
+import { playersData } from "@/interfaces/players";
 
 interface RenderListProps {
-    options: string[];
-    onTransfer: (options: string[]) => void;
+    options: playersData[];
+    onTransfer: (options: playersData[]) => void;
     type: "forward" | "backward";
 }
 
@@ -33,22 +31,22 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
             : [...current, val],
         );
 
-    const items = options.filter((item) => item.toLowerCase().includes(search.toLowerCase().trim())).map((item) => (
+    const items = options.filter((item) => item.firstName.toLowerCase().includes(search.toLowerCase().trim()) || item.last_name.toLowerCase().includes(search.toLowerCase().trim())).map((item) => (
         <Combobox.Option
-            value={item}
-            key={item}
-            active={value.includes(item)}
+            value={item.player_uid}
+            key={item.player_uid}
+            active={value.includes(item.player_uid)}
             onMouseOver={() => combobox.resetSelectedOption()}
         >
-            <Group gap="sm">
-            <Checkbox
-                checked={value.includes(item)}
-                onChange={() => {}}
-                aria-hidden
-                tabIndex={-1}
-                style={{ pointerEvents: "none" }}
-            />
-            <span>{item}</span>
+            <Group gap="sm" className={classes.group}>
+                <Checkbox
+                    checked={value.includes(item.player_uid)}
+                    onChange={() => {}}
+                    aria-hidden
+                    tabIndex={-1}
+                    style={{ pointerEvents: "none" }}
+                />
+                <Text size="sm" truncate="end">{`${item.firstName} ${item.last_name}`}</Text>
             </Group>
         </Combobox.Option>
     ));
@@ -79,7 +77,7 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
                         : "Transfer selected items left"
                     }
                     onClick={() => {
-                        onTransfer(value);
+                        onTransfer(options.filter(o => value.includes(o.player_uid)) );
                         setValue([]);
                     }}
                     >
@@ -101,7 +99,7 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
         </div>
     );
 }
-export function TransferList({data, handleTransfer}:{data: [string[],string[]], handleTransfer: (transferFrom: number, options: string[]) => void}) {
+export function TransferList({data, handleTransfer}:{data: [playersData[],playersData[]], handleTransfer: (transferFrom: number, options: playersData[]) => void}) {
 
 
     return (

@@ -39,8 +39,8 @@ const TeamCard = ({ team }: { team: TeamRes }) => {
         <CardSection className={styles.section}>
           <ThemeIcon
             size={52}
-            variant="gradient"
-            gradient={{ from: "entityPrimary", to: "entitySecondary", deg: 90 }}
+            variant="filled"
+            color="entitySecondary"
           >
             <UsersGroup size={52} stroke={1} />
           </ThemeIcon>

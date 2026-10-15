@@ -9,7 +9,9 @@ import { getTeamCategories, postAssignTeamCategoryClient } from '@/app/requests/
 import { TeamRes } from '@/interfaces/teams';
 import { MultiSelect } from '@mantine/core'; 
 import { useRouter } from 'next/navigation';
+import DeleteModal from './DeleteModal';
 
+//TODO: Arreglar asignaciond de jugadores
 const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleClose:()=>void, team: TeamRes, entity: string}) => {
     const t = useTranslations("Teams");
     const router = useRouter()
@@ -23,7 +25,7 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
     const [categories, setCategories] = useState<{value:string, label:string}[]>([])
     const [selectedCategories, setSelectedCategories] = useState<string[]>(team.categories.map((v)=>(v.category_uid)))
 
-    const [data, setData] = useState<[string[], string[]]>([[], []]);
+    const [data, setData] = useState<[playersData[], playersData[]]>([[], []]);
 
 
     const categoriesFilter: OptionsFilter = ({ options, search }) => {
@@ -33,26 +35,29 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
 
         filtered.sort((a, b) => a.label.localeCompare(b.label));
         return filtered;
-        };
-    const handleTransfer = (transferFrom: number, options: string[]) =>
+    };
+    const handleTransfer = (transferFrom: number, options: playersData[]) =>
         setData((current) => {
-        const transferTo = transferFrom === 0 ? 1 : 0;
-        const transferFromData = current[transferFrom].filter(
-            (item) => !options.includes(item),
-        );
-        const transferToData = [...current[transferTo], ...options];
+            const transferTo = transferFrom === 0 ? 1 : 0;
 
-        const result = [];
-        result[transferFrom] = transferFromData;
-        result[transferTo] = transferToData;
-        return result as [string[], string[]];
-    });
+            const transferFromData = current[transferFrom].filter( (p) => !options.some( o => o.player_uid === p.player_uid) );
+            const transferToData = [...current[transferTo], ...options];
+
+            const result = [];
+            result[transferFrom] = transferFromData;
+            result[transferTo] = transferToData;
+            return result as [playersData[], playersData[]];
+        });
+    const handleCloseAndReset = () => {
+        handleClose()
+        setData([[], []])
+    }
 
     const obtainPlayersAndOptions = useCallback(async ()=>{
         setisLoading(true)
         
         const resp = await Promise.allSettled([
-            getPlayersClient(),
+            getPlayersClient(entity),
             getTeamCategories(entity)
         ])
         if(resp.some(r => r.status === 'rejected' || !r.value.success )){
@@ -66,6 +71,7 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
             const allPlayers = resp[0].status === 'fulfilled' && resp[0].value.success ? resp[0].value.data as playersData[]  : []
             const allCat = resp[1].status === 'fulfilled' && resp[1].value.success ? resp[1].value.data?.map(v => ({label:v.description, value: v.category_uid})) ?? [] : []
             setPlayeroptions(allPlayers)
+            setData(prev => ([prev[0], allPlayers]))
             setCategories(allCat)
         }
         setisLoading(false)
@@ -93,14 +99,14 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
             message: t('team_updated'),
             color:'green'
         })
-        handleClose()
+        handleCloseAndReset()
         setisUpdating(false)
         router.refresh()
     }
 
 
     return (
-        <Modal opened={opened} onClose={handleClose} title={team.description} centered>
+        <Modal opened={opened} onClose={handleCloseAndReset} title={team.description} centered>
             {
                 isLoading ?
                     <Flex justify={'center'} gap={'1rem'} my={'2rem'}>
@@ -120,10 +126,10 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
                         
                         <TransferList data={data} handleTransfer={handleTransfer}/>
 
-                        <Flex justify={'space-between'} gap={'1rem'}>
-                            <Button variant='outline' color='red' onClick={handleClose}>{t('delete_team')}</Button>
+                        <Flex justify={'space-between'} gap={'1rem'} mt={'1rem'}>
+                            <DeleteModal mainModalClose={handleCloseAndReset} team_uid={team.team_uid}/>
                             <Flex justify={'flex-end'} gap={'1rem'}>
-                                <Button variant='subtle' onClick={handleClose}>{t('close')}</Button>
+                                <Button variant='subtle' onClick={handleCloseAndReset}>{t('close')}</Button>
                                 <Button loading={isUpdating} onClick={handleSubmit}>{t('save')}</Button>
                             </Flex>
                         </Flex>
