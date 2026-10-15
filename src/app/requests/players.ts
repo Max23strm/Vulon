@@ -1,16 +1,15 @@
-import { PlayersPageProps } from "@/interfaces/fetchers";
 import { playersData } from "@/interfaces/players";
 import { StandardResponsePromise } from "@/interfaces/requests";
 import { cookies } from "next/headers";
 
-export const getAllPlayers = async (): StandardResponsePromise<playersData[]> => {
+export const getAllPlayers = async (entity_uid?: string): StandardResponsePromise<playersData[]> => {
 
     const cookieStore = await cookies()
     const authToken = cookieStore.get('authToken')
     try {
-        // if(!entity_uid) throw new Error('Entity is required')
+        if(!entity_uid) throw new Error('Entity is required')
         const playersResponse = await Promise.resolve(
-            fetch(process.env.BASE_URL + '/api/' + "players", {
+            fetch(process.env.BASE_URL + '/api/' + "players/" + entity_uid, {
                 cache:'no-store', 
                 headers: {
                     'Content-Type': 'application/json',
@@ -18,7 +17,7 @@ export const getAllPlayers = async (): StandardResponsePromise<playersData[]> =>
                 },
             }, ),
         );
-        
+
         const playersRes = (await playersResponse.json())
         if(!playersRes.success)  throw new Error(playersRes.error)
 

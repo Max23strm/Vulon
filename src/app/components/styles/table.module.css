@@ -13,9 +13,9 @@
     overflow: hidden;
 }
 .table_all thead th{
-    background-color: var(--mantine-color-primary-pitz-light-color);
+    /* background-color: var(--mantine-color-primary-pitz-light-color); */
     text-align: center;
-    color: var(--mantine-color-dark-8);
+    /* color: var(--mantine-color-dark-8); */
     backdrop-filter: blur(10px)
 }
 
