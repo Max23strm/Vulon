@@ -14,3 +14,9 @@ export interface TeamCategory {
     category_uid:             string
     description:              string
 }
+
+export interface TeamAssignation {
+    team_uid:             string
+    players:              string[]
+}
+

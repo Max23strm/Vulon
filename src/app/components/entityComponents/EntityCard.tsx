@@ -55,10 +55,10 @@ const EntityCard = ({ entity }: { entity: EntityAssigned }) => {
             <Title order={3}>{entity.name}</Title>
             <div>
                 <Text size="md">
-                    {format.displayName(entity.country_code, { type: "region" })}
+                    {format.displayName(entity.country_code?.trim(), { type: "region" })}
                 </Text>
                 <Text size="md">
-                    {format.displayName(entity.currency_code, { type: "currency" })}
+                    {format.displayName(entity.currency_code?.trim(), { type: "currency" })}
                 </Text>
             </div>
         </CardSection>
