@@ -10,19 +10,21 @@ import {
   useCombobox,
 } from "@mantine/core";
 import classes from "./TransferList.module.css";
-import { ChevronRightWaves } from "@mynaui/icons-react";
+import { ChevronRightWaves,Plus ,Minus, Save  } from "@mynaui/icons-react";
 import { playersData } from "@/interfaces/players";
+import { useTranslations } from "next-intl";
 
 interface RenderListProps {
-    options: playersData[];
-    onTransfer: (options: playersData[]) => void;
-    type: "forward" | "backward";
+  options: playersData[];
+  onTransfer: (options: playersData[]) => void;
+  type: "forward" | "backward";
 }
 
 function RenderList({ options, onTransfer, type }: RenderListProps) {
     const combobox = useCombobox();
     const [value, setValue] = useState<string[]>([]);
     const [search, setSearch] = useState("");
+    const t = useTranslations("Teams");
 
     const handleValueSelect = (val: string) =>
         setValue((current) =>
@@ -31,14 +33,19 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
             : [...current, val],
         );
 
-    const items = options.filter((item) => item.firstName.toLowerCase().includes(search.toLowerCase().trim()) || item.last_name.toLowerCase().includes(search.toLowerCase().trim())).map((item) => (
-        <Combobox.Option
-            value={item.player_uid}
-            key={item.player_uid}
-            active={value.includes(item.player_uid)}
-            onMouseOver={() => combobox.resetSelectedOption()}
-        >
-            <Group gap="sm" className={classes.group}>
+    const items = options.filter(
+        (item) =>
+            item.firstName.toLowerCase().includes(search.toLowerCase().trim()) ||
+            item.last_name.toLowerCase().includes(search.toLowerCase().trim()),
+        )
+        .map((item) => (
+            <Combobox.Option
+                value={item.player_uid}
+                key={item.player_uid}
+                active={value.includes(item.player_uid)}
+                onMouseOver={() => combobox.resetSelectedOption()}
+            >
+                <Group gap="sm" className={classes.group}>
                 <Checkbox
                     checked={value.includes(item.player_uid)}
                     onChange={() => {}}
@@ -46,10 +53,14 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
                     tabIndex={-1}
                     style={{ pointerEvents: "none" }}
                 />
-                <Text size="sm" truncate="end">{`${item.firstName} ${item.last_name}`}</Text>
-            </Group>
-        </Combobox.Option>
-    ));
+                <Text
+                    size="sm"
+                    truncate="end"
+                >{`${item.firstName} ${item.last_name}`}</Text>
+                </Group>
+            </Combobox.Option>
+        )
+    );
 
     return (
         <div className={classes.renderList} data-type={type}>
@@ -57,9 +68,9 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
                 <Combobox.EventsTarget>
                 <Group wrap="nowrap" gap={0} className={classes.controls}>
                     <TextInput
-                    placeholder="Search groceries"
+                    placeholder={t("search_players")}
                     classNames={{ input: classes.input }}
-                    aria-label="Search groceries"
+                    aria-label={t("search_players")}
                     value={search}
                     onChange={(event) => {
                         setSearch(event.currentTarget.value);
@@ -73,15 +84,15 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
                     className={classes.control}
                     aria-label={
                         type === "forward"
-                        ? "Transfer selected items right"
-                        : "Transfer selected items left"
+                        ? t("assign_players")
+                        : t("unassign_players")
                     }
                     onClick={() => {
-                        onTransfer(options.filter(o => value.includes(o.player_uid)) );
+                        onTransfer(options.filter((o) => value.includes(o.player_uid)));
                         setValue([]);
                     }}
                     >
-                    <ChevronRightWaves className={classes.icon} />
+                    {type === 'backward' ? <Plus className={classes.icon} /> : <Minus className={classes.icon} /> }
                     </ActionIcon>
                 </Group>
                 </Combobox.EventsTarget>
@@ -91,7 +102,7 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
                     {items.length > 0 ? (
                     items
                     ) : (
-                    <Combobox.Empty>Nothing found....</Combobox.Empty>
+                    <Combobox.Empty>{t('no_players_found')}</Combobox.Empty>
                     )}
                 </Combobox.Options>
                 </div>
@@ -99,9 +110,10 @@ function RenderList({ options, onTransfer, type }: RenderListProps) {
         </div>
     );
 }
-export function TransferList({data, handleTransfer}:{data: [playersData[],playersData[]], handleTransfer: (transferFrom: number, options: playersData[]) => void}) {
-
-
+export function TransferList({ data, handleTransfer }: {
+    data: [playersData[], playersData[]];
+    handleTransfer: (transferFrom: number, options: playersData[]) => void;
+}) {
     return (
         <div className={classes.root}>
             <RenderList

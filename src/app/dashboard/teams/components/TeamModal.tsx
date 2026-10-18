@@ -5,7 +5,7 @@ import { TransferList } from './TransferList';
 import { getPlayersClient } from '@/app/requests/players_client';
 import { notifications } from '@mantine/notifications';
 import { playersData } from '@/interfaces/players';
-import { getTeamCategories, postAssignTeamCategoryClient } from '@/app/requests/teams_client';
+import { deleteBulkAssignation, GetTeamAssignation, getTeamCategories, postAssignTeamCategoryClient, postBulkAssignation } from '@/app/requests/teams_client';
 import { TeamRes } from '@/interfaces/teams';
 import { MultiSelect } from '@mantine/core'; 
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,7 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
 
     const [isLoading, setisLoading] = useState(true)
     const [isUpdating, setisUpdating] = useState(false)
-
+    const [isTransfering, setIsTransfering] = useState(false)
 
     const [playeroptions, setPlayeroptions] = useState<playersData[]>([]);
 
@@ -36,19 +36,38 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
         filtered.sort((a, b) => a.label.localeCompare(b.label));
         return filtered;
     };
-    const handleTransfer = (transferFrom: number, options: playersData[]) =>
-        setData((current) => {
-            const transferTo = transferFrom === 0 ? 1 : 0;
-
-            const transferFromData = current[transferFrom].filter( (p) => !options.some( o => o.player_uid === p.player_uid) );
-            const transferToData = [...current[transferTo], ...options];
-
-            const result = [];
-            result[transferFrom] = transferFromData;
-            result[transferTo] = transferToData;
-            return result as [playersData[], playersData[]];
-        });
+    const handleTransfer = async (transferFrom: number, options: playersData[]) =>{
+        try {
+            setIsTransfering(true)
+            const players = options.map( p => p.player_uid)
+            if(transferFrom === 1) {
+                const assign = await postBulkAssignation({team_uid: team.team_uid, players})
+                if(!assign.success) throw new Error(assign.error) 
+            } else {
+                const unAssign = await deleteBulkAssignation({team_uid: team.team_uid, players})
+                if(!unAssign.success) throw new Error(unAssign.error) 
+            }
+            setData((current) => {
+                const transferTo = transferFrom === 0 ? 1 : 0;
+    
+                const transferFromData = current[transferFrom].filter( (p) => !options.some( o => o.player_uid === p.player_uid) );
+                const transferToData = [...current[transferTo], ...options];
+    
+                const result = [];
+                result[transferFrom] = transferFromData;
+                result[transferTo] = transferToData;
+                return result as [playersData[], playersData[]];
+            });
+            setIsTransfering(false)
+        } catch(e) {
+            notifications.show({
+                message: t('error_during_assigntation'),
+                color:'red'
+            })
+        }
+    }
     const handleCloseAndReset = () => {
+        router.refresh()
         handleClose()
         setData([[], []])
     }
@@ -58,7 +77,8 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
         
         const resp = await Promise.allSettled([
             getPlayersClient(entity),
-            getTeamCategories(entity)
+            getTeamCategories(entity),
+            GetTeamAssignation(team.team_uid)
         ])
         if(resp.some(r => r.status === 'rejected' || !r.value.success )){
             notifications.show({
@@ -70,8 +90,14 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
         } else {
             const allPlayers = resp[0].status === 'fulfilled' && resp[0].value.success ? resp[0].value.data as playersData[]  : []
             const allCat = resp[1].status === 'fulfilled' && resp[1].value.success ? resp[1].value.data?.map(v => ({label:v.description, value: v.category_uid})) ?? [] : []
+            const assignatedPlayers = resp[2].status === 'fulfilled' && resp[2].value.success ? resp[2].value.data : null
+
             setPlayeroptions(allPlayers)
-            setData(prev => ([prev[0], allPlayers]))
+
+            const freePlayers = allPlayers.filter( p => !assignatedPlayers?.players.includes(p.player_uid))
+            const assignated = allPlayers.filter( p => assignatedPlayers?.players.includes(p.player_uid))
+
+            setData([assignated, freePlayers])
             setCategories(allCat)
         }
         setisLoading(false)
@@ -101,7 +127,6 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
         })
         handleCloseAndReset()
         setisUpdating(false)
-        router.refresh()
     }
 
 

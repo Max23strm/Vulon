@@ -65,7 +65,13 @@
         "team_name_form_placeholder" : "Insert new team's name",
         "team_name_longer" : "Team's name should be longer",
         "team_name" : "Team name",
+        "assign_players" : "Assign players",
+        "search_players" : "Search players",
+        "no_players_found" : "No players found",
+        "unassign_players" : "Unassign players",
         "team_not_updated" : "Team not updated",
+        "error_during_assigntation" : "Error assignating players",
+        "error_getting_players" : "Error obtaining players",
         "team_updated" : "Team updated"
     }
 }

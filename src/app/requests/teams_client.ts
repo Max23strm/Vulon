@@ -1,5 +1,5 @@
 import { StandardResponsePromise } from "@/interfaces/requests";
-import { TeamCategory } from "@/interfaces/teams";
+import { TeamAssignation, TeamCategory } from "@/interfaces/teams";
 
 export const postCreateTeamClient = async (entity_uid : string, description: string): StandardResponsePromise<string> => {
 
@@ -104,6 +104,120 @@ export const getTeamCategories = async (entity_uid: string): StandardResponsePro
         };
 
 
+    } catch (e) {
+        return {
+            data:null,
+            success: false,
+            error: e
+        }
+    }
+    
+}
+
+export const GetTeamAssignation = async (team_uid: string) : StandardResponsePromise<TeamAssignation> => {
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+    
+    try {
+    
+        if(!team_uid) throw new Error('Entity is required')
+    
+        const teamsResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "team/assigned/" + team_uid, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+        })
+    
+        const AssigneRes = (await teamsResponse.json())
+        if(!AssigneRes.success)  throw new Error(AssigneRes.error)
+    
+        const asign = AssigneRes?.data ?? []
+    
+        return {
+            success: true,
+            data: asign,
+            error: null,
+        };
+    
+    
+    } catch (e) {
+        return {
+            data:null,
+            success: false,
+            error: e
+        }
+    }
+
+}
+export const postBulkAssignation = async (team_assignation: {team_uid: string, players: string[]}) : StandardResponsePromise<null> => {
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+    
+    try {
+        if(!team_assignation.team_uid) throw new Error('team_uid is required')
+        if(team_assignation.players.length === 0) throw new Error('No players sent')
+    
+        const teamsResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "team/assignBulk", {
+            method:'Post',
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+            body: JSON.stringify(team_assignation),
+
+        })
+    
+        const AssigneRes = (await teamsResponse.json())
+        if(!AssigneRes.success)  throw new Error(AssigneRes.error)
+    
+        return {
+            success: true,
+            data: null,
+            error: null,
+        };
+    
+    
+    } catch (e) {
+        return {
+            data:null,
+            success: false,
+            error: e
+        }
+    }
+
+}
+export const deleteBulkAssignation = async (team_assignation: {team_uid: string, players: string[]}) : StandardResponsePromise<null> => {
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+    
+    try {
+        if(!team_assignation.team_uid) throw new Error('team_uid is required')
+        if(team_assignation.players.length === 0) throw new Error('No players sent')
+    
+        const teamsResponse = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/' + "team/unassignBulk", {
+            method:'DELETE',
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+            body: JSON.stringify(team_assignation),
+
+        })
+    
+        const AssigneRes = (await teamsResponse.json())
+        if(!AssigneRes.success)  throw new Error(AssigneRes.error)
+    
+        return {
+            success: true,
+            data: null,
+            error: null,
+        };
+    
+    
     } catch (e) {
         return {
             data:null,
