@@ -1,5 +1,5 @@
 "use client"
-import { Avatar, Button, Card, Checkbox, Grid, GridCol, Group, Select, SelectProps, Text, Textarea, TextInput } from '@mantine/core'
+import {  Button, Checkbox, Grid, GridCol, Group, Select, SelectProps, Text, Textarea, TextInput } from '@mantine/core'
 import { estados, grupos_sanguineos, sexo } from '../helpers/options'
 import styles from '../new-player/styles/playerDetail.module.css'
 import { useForm } from '@mantine/form'
@@ -7,12 +7,13 @@ import dayjs from '@/helpers/dayjs'
 import { playersDetailResponse, playerTypeForm, playerTypeFormWithStatusAsString, putPlayersOptions } from '@/interfaces/players'
 import { DatePickerInput, DatesProvider } from '@mantine/dates'
 import utc from 'dayjs/plugin/utc';
-import Link from 'next/link'
 import { notifications } from '@mantine/notifications'
-import { useRouter } from 'next/navigation'
-import { putPlayerForm } from '@/helpers/dataPutter'
-import { postPlayerForm } from '@/helpers/dataPoster'
 import PlayerStatusBadge from './PlayerStatusBadge'
+import { useTranslations } from 'next-intl'
+import { postPlayerForm, putPlayerForm } from '@/app/requests/players_client'
+import { useContext } from 'react'
+import { getSession } from '@/app/services/cookies/serverSideStoring'
+import { useAppState } from '@/app/providers/StateProvider'
 
 type Response = { isSuccess: boolean; estado?: string; error?: unknown; player_uid?: string }
 
@@ -20,31 +21,36 @@ interface FormEditInterface {
   player_info: playersDetailResponse;
   page: 'edit';
   player_uid: string;
+  handleClose: ()=>void
 }
 
 interface FormNewInterface {
   player_info: playersDetailResponse;
   page: 'new';
   player_uid?: string
+  handleClose: ()=>void
 }
 
 type formInterface = FormEditInterface | FormNewInterface;
 
-const PlayerForm = ({player_info, page, player_uid} : formInterface) => {
+const PlayerForm = ({player_info, page, player_uid, handleClose} : formInterface) => {
+    const entity_uid = useAppState((state) => state.entity.entity_uid);
     dayjs.extend(utc);
-    const router = useRouter()
-    const hanleResponse = (res : Response) => {
-        if(res.isSuccess) {
+    const t = useTranslations('Players')
+    
+    const hanleResponse = (res : any) => {
+        console.log(res)
+        if(res.success) {
             notifications.show({
                 title: 'Éxito',
-                message:'Registro realizado con éxito',
+                message:t('success_registration'),
                 color: 'green'
             })
-            router.push('/dashboard/players/')
+            handleClose()
         } else {
             notifications.show({
                 title: 'Error',
-                message:'Ocurrió un error, intente nuevamente o contate a un administrador',
+                message:t('error_registration'),
                 color: 'red'
             })
         }
@@ -57,7 +63,7 @@ const PlayerForm = ({player_info, page, player_uid} : formInterface) => {
                 message: 'Espere un segundo por favor',
             })
 
-            const response = await postPlayerForm({...data, status : data.status === '1' ? 1 : 0} as playerTypeFormWithStatusAsString);
+            const response = await postPlayerForm({...data, status : data.status === '1' ? 1 : 0, entity_uid:entity_uid} as playerTypeFormWithStatusAsString);
             hanleResponse(response)
         } else {
             notifications.show({
@@ -109,11 +115,11 @@ const PlayerForm = ({player_info, page, player_uid} : formInterface) => {
         validateInputOnChange:true,
         // functions will be used to validate values at corresponding key
         validate: {
-            firstName: (value) => value.length < 2 ? 'Ingrese el nombre del jugador' : null,
-            last_name: (value) => value.length < 1 ? 'Ingrese el apellido del jugador' : null,
-            phone_number: (value) => value.length < 1 ? 'Ingrese un teléfono válido' : null,
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Email invalido'),
-            birth_dt: (value) => (dayjs(value).isValid() ? null : 'Fecha invalida'),
+            firstName: (value) => value.length < 2 ? t('insert_player_name') : null,
+            last_name: (value) => value.length < 1 ? t('insert_player_last_name') : null,
+            phone_number: (value) => value.length < 1 ? t('insert_valid_phone_number') : null,
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : t('insert_player_email')),
+            birth_dt: (value) => (dayjs(value).isValid() ? null : t('invalid_date')),
         },
         transformValues: (values) =>({
             ...values,
@@ -133,241 +139,208 @@ const PlayerForm = ({player_info, page, player_uid} : formInterface) => {
     return (
         <form onSubmit={form.onSubmit(handlePromise)} className={styles.form}> 
             <Grid gap={{base: 12}} className={styles.fields}>
-                <GridCol span={{ base: 12, md:5, lg:3 }}>
-                    <Card className={styles.tabs_section} style={{background: status === '0' ? 'linear-gradient(145deg, var(--mantine-color-indigo-filled) 0%, var(--mantine-color-accent-pitz-filled) 100%)' : 'linear-gradient(145deg, var(--mantine-color-indigo-filled) 0%, var(--mantine-color-primary-pitz-filled) 100%)'}} radius={'lg'}>
-                        <Avatar className={styles.image} variant='gradient' gradient={{ from: sex === 'Mujer' ? 'red' :'indigo', to: 'primary-pitz', deg: 135 }}/>
-
-                        <div className={styles.nav_buttons}>
+                <GridCol span={{ base: 12, md:12, lg:12 }}>
+                    <Grid gap={{base: 12}} className={styles.fields}>
+                        <GridCol span={{ base: 12 }}>
+                            <Text c='entityPrimary' fw={700} size='xl' id='info-básica'>{t('basic_information')}</Text>
+                        </GridCol>
+                        <GridCol span={{ base: 12, md: 4 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                withAsterisk
+                                label={t('name')}
+                                placeholder={t('name')}
+                                key={form.key('firstName')}
+                                {...form.getInputProps('firstName')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, md: 4 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                withAsterisk
+                                radius={'md'}
+                                label={t('last_name')}
+                                placeholder={t('last_name')}
+                                key={form.key('last_name')}
+                                {...form.getInputProps('last_name')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, md: 4 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                withAsterisk
+                                label={t('email')}
+                                placeholder={t('email')}
+                                key={form.key('email')}
+                                {...form.getInputProps('email')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('address')}
+                                placeholder={t('address')}
+                                key={form.key('address')}
+                                {...form.getInputProps('address')}
+                                />
+                        </GridCol>
+                        <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                withAsterisk
+                                label={t('phone_number')}
+                                placeholder={t('phone_number')}
+                                key={form.key('phone_number')}
+                                {...form.getInputProps('phone_number')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
+                            <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
+                                <DatePickerInput
+                                    radius={'md'}
+                                    withAsterisk
+                                    label={t('birth_date')}
+                                    className={styles.full_width}
+                                    key={form.key('birth_dt')}
+                                    {...form.getInputProps('birth_dt')}
+                                />
+                            </DatesProvider>
+                        </GridCol>
+                        <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
+                                <Select
+                                    className={styles.full_width}
+                                    radius={'md'}
+                                    withAsterisk
+                                    label={t('sex')}
+                                    data={sexo}
+                                    placeholder={t('sex')}
+                                    key={form.key('sex')}
+                                    {...form.getInputProps('sex')}
+                                />
+                            </GridCol>
+                        <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
+                            <Select
+                                className={styles.full_width}
+                                radius={'md'}
+                                withAsterisk
+                                label={t('state')}
+                                data={estados}
+                                placeholder={t('state')}
+                                key={form.key('status')}
+                                renderOption={renderSelectOption}
+                                {...form.getInputProps('status')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12 }}>
+                            <Text c='entityPrimary' fw={700} size='xl'  id='info-médica'>{t('medical_information')}</Text>
+                        </GridCol>
+                        <GridCol span={{ base: 12, md:6, lg: 4 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('sickness')}
+                                placeholder={t('cronic_sickness')}
+                                key={form.key('enfermedad')}
+                                {...form.getInputProps('enfermedad')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, md:6, lg: 4 }}>
+                            <Select
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('blood_type')}
+                                data={grupos_sanguineos}
+                                placeholder={t('blood_type')}
+                                key={form.key('blood_type')}
+                                {...form.getInputProps('blood_type')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, md:12, lg:4 }}>
+                            <div className={styles.seguro_fields}>
+                                <Checkbox
+                                    label={t('insurance')}
+                                    labelPosition="left"
+                                    key={form.key('insurance')}
+                                    {...form.getInputProps('insurance')}
+                                />
+                                <TextInput
+                                    className={styles.full_width}
+                                    radius={'md'}
+                                    label={t('insurance_name')}
+                                    placeholder={t('insurance_name')}
+                                    key={form.key('insurance_name')}
+                                    {...form.getInputProps('insurance_name')}
+                                />
+                            </div>
+                        </GridCol>
+                        <GridCol span={{ base: 12 }}>
+                            <Text c='entityPrimary' fw={700} size='xl'  id='otra-info'>{t('other_information')}</Text>
+                            
+                        </GridCol >
+                        <GridCol span={{ base: 12, md:6 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('affiliation')}
+                                placeholder={t('affiliate_number')}
+                                key={form.key('afiliation')}
+                                {...form.getInputProps('afiliation')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12, md:6 }}>
+                            <TextInput
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('id')}
+                                placeholder={t('id')}
+                                key={form.key('curp')}
+                                {...form.getInputProps('curp')}
+                            />
+                            
+                            {/* <MultiSelect
+                                label="Posición"
+                                radius="md"
+                                data={posiciones}
+                                key={form.key('position')}
+                                {...form.getInputProps('position')}
+                            /> */}
+                        </GridCol>
+                        <GridCol span={{ base: 12 }}>
+                            <Textarea
+                                className={styles.full_width}
+                                radius={'md'}
+                                label={t('comment')}
+                                placeholder={t('comment')}
+                                key={form.key('comment')}
+                                {...form.getInputProps('comment')}
+                            />
+                        </GridCol>
+                        <GridCol span={{ base: 12 }}>
+                        <Group  className={styles.butones}>
                             <Button 
-                                variant='default'
-                                component='a'
-                                size='sm'
-                                href='#info-básica'
+                                onClick={handleClose}
+                                variant='subtle'
                             >
-                                Información básica
+                                {t('return')}
                             </Button>
-                            <Button 
-                                variant='default'
-                                component='a'
-                                size='sm'
-                                href='#info-médica'
+                            <Button
+                                disabled={ !form.isDirty() || form.submitting}
+                                loading={form.submitting}
+                                type='submit'
                             >
-                                Información médica
+                                {
+                                    page === 'edit' ?
+                                        t('update') : t('create')
+                                }
                             </Button>
-                            <Button 
-                                variant='default'
-                                component='a'
-                                size='sm'
-                                href='#otra-info'
-                            >
-                                Otra información
-                            </Button>
-                        </div>
-                    </Card>    
-                </GridCol>
-            <GridCol span={{ base: 12, md:7, lg:9 }}>
-            <Grid gap={{base: 12}} className={styles.fields}>
-                <GridCol span={{ base: 12 }}>
-                    <Text variant='gradient' fw={700} size='xl' id='info-básica'>Información básica</Text>
-                </GridCol>
-                <GridCol span={{ base: 12, md: 4 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        withAsterisk
-                        label="Nombre"
-                        placeholder="Nombres"
-                        key={form.key('firstName')}
-                        {...form.getInputProps('firstName')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, md: 4 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        withAsterisk
-                        radius={'md'}
-                        label="Apellidos"
-                        placeholder="Apellidos"
-                        key={form.key('last_name')}
-                        {...form.getInputProps('last_name')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, md: 4 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        withAsterisk
-                        label="Correo electrónico"
-                        placeholder="Correo electrónico"
-                        key={form.key('email')}
-                        {...form.getInputProps('email')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        label="Dirección"
-                        placeholder="Dirección"
-                        key={form.key('address')}
-                        {...form.getInputProps('address')}
-                        />
-                </GridCol>
-                <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        withAsterisk
-                        label="Número telefónico"
-                        placeholder="Número telefónico"
-                        key={form.key('phone_number')}
-                        {...form.getInputProps('phone_number')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
-                    <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
-                        <DatePickerInput
-                            radius={'md'}
-                            withAsterisk
-                            label="Fecha de nacimiento"
-                            className={styles.full_width}
-                            key={form.key('birth_dt')}
-                            {...form.getInputProps('birth_dt')}
-                        />
-                    </DatesProvider>
-                </GridCol>
-                <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
-                        <Select
-                            className={styles.full_width}
-                            radius={'md'}
-                            withAsterisk
-                            label="Género"
-                            data={sexo}
-                            placeholder="Selecciona un género"
-                            key={form.key('sex')}
-                            {...form.getInputProps('sex')}
-                        />
+                        </Group>
+                        </GridCol>
+                    </Grid>
                     </GridCol>
-                <GridCol span={{ base: 12, sm:6, md: 4, lg:3 }}>
-                    <Select
-                        className={styles.full_width}
-                        radius={'md'}
-                        withAsterisk
-                        label="Estado"
-                        data={estados}
-                        placeholder="Selecciona un estado"
-                        key={form.key('status')}
-                        renderOption={renderSelectOption}
-                        {...form.getInputProps('status')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12 }}>
-                    <Text variant='gradient' fw={700} size='xl' id='info-médica'>Información médica</Text>
-                </GridCol>
-                <GridCol span={{ base: 12, md:6, lg: 4 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        label='Enfermedades'
-                        placeholder='Enfermedades crónicas o a notar'
-                        key={form.key('enfermedad')}
-                        {...form.getInputProps('enfermedad')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, md:6, lg: 4 }}>
-                    <Select
-                        className={styles.full_width}
-                        radius={'md'}
-                        label="Grupo sanguineo"
-                        data={grupos_sanguineos}
-                        placeholder="Selecciona un grupo sanguíneo"
-                        key={form.key('blood_type')}
-                        {...form.getInputProps('blood_type')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, md:12, lg:4 }}>
-                    <div className={styles.seguro_fields}>
-                        <Checkbox
-                            label="Seguro"
-                            labelPosition="left"
-                            key={form.key('insurance')}
-                            {...form.getInputProps('insurance')}
-                        />
-                        <TextInput
-                            className={styles.full_width}
-                            radius={'md'}
-                            label="Nombre de seguro"
-                            placeholder="Nombre de seguro"
-                            key={form.key('insurance_name')}
-                            {...form.getInputProps('insurance_name')}
-                        />
-                    </div>
-                </GridCol>
-                <GridCol span={{ base: 12 }}>
-                    <Text variant='gradient' fw={700} size='xl' id='otra-info'>Otra información</Text>
-                    
-                </GridCol >
-                <GridCol span={{ base: 12, md:6 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        label='Afiliación'
-                        placeholder='Número de afiliado'
-                        key={form.key('afiliation')}
-                        {...form.getInputProps('afiliation')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12, md:6 }}>
-                    <TextInput
-                        className={styles.full_width}
-                        radius={'md'}
-                        label='Curp'
-                        placeholder='Curp'
-                        key={form.key('curp')}
-                        {...form.getInputProps('curp')}
-                    />
-                    
-                    {/* <MultiSelect
-                        label="Posición"
-                        radius="md"
-                        data={posiciones}
-                        key={form.key('position')}
-                        {...form.getInputProps('position')}
-                    /> */}
-                </GridCol>
-                <GridCol span={{ base: 12 }}>
-                    <Textarea
-                        className={styles.full_width}
-                        radius={'md'}
-                        label='Comentario'
-                        placeholder='Ingresa algun comentario'
-                        key={form.key('comment')}
-                        {...form.getInputProps('comment')}
-                    />
-                </GridCol>
-                <GridCol span={{ base: 12 }}>
-                <Group  className={styles.butones}>
-                    <Button 
-                        component={Link}
-                        href={'/dashboard/players'}
-                        variant='subtle'
-                    >
-                        Regresar
-                    </Button>
-                    <Button
-                        disabled={ !form.isDirty() || form.submitting}
-                        loading={form.submitting}
-                        type='submit'
-                    >
-                        {
-                            page === 'edit' ?
-                                'Actualizar' : 'Crear'
-                        }
-                    </Button>
-                </Group>
-                </GridCol>
-            </Grid>
-                </GridCol>
             </Grid>
 
         </form>

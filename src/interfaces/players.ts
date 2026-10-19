@@ -16,6 +16,13 @@ export interface playersData {
   assigned: string[];
 }
 
+export interface playersStatsData {
+  entity_uid: string;
+  registered: number;
+  active: number;
+  male: number;
+  female: number;
+}
 
 export interface playersDetailResponse {
   address: string | null,
@@ -61,7 +68,8 @@ export interface playerTypeForm {
 }
 
 export type playerTypeFormWithStatusAsString = playerTypeForm & {
-  status: number;
+    status: number;
+    entity_uid: string
 }
 
 export interface putPlayersOptions {
