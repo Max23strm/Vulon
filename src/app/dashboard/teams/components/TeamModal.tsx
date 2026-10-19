@@ -10,12 +10,12 @@ import { TeamRes } from '@/interfaces/teams';
 import { MultiSelect } from '@mantine/core'; 
 import { useRouter } from 'next/navigation';
 import DeleteModal from './DeleteModal';
+import { useMediaQuery } from '@mantine/hooks';
 
-//TODO: Arreglar asignaciond de jugadores
 const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleClose:()=>void, team: TeamRes, entity: string}) => {
     const t = useTranslations("Teams");
     const router = useRouter()
-
+    const isMobile = useMediaQuery('(max-width: 50em)');
     const [isLoading, setisLoading] = useState(true)
     const [isUpdating, setisUpdating] = useState(false)
     const [isTransfering, setIsTransfering] = useState(false)
@@ -131,7 +131,7 @@ const TeamModal = ({opened, handleClose, entity, team}:{opened: boolean, handleC
 
 
     return (
-        <Modal opened={opened} onClose={handleCloseAndReset} title={team.description} centered>
+        <Modal opened={opened} onClose={handleCloseAndReset} title={team.description} centered >
             {
                 isLoading ?
                     <Flex justify={'center'} gap={'1rem'} my={'2rem'}>

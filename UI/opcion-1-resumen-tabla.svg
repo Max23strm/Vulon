@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" fill="none">
+  <rect width="1440" height="960" fill="#F4F6FA"/>
+  <rect width="238" height="960" fill="#111C35"/>
+  <rect x="25" y="26" width="38" height="38" rx="12" fill="#F0A449"/>
+  <path d="M36 45h16M44 37v16" stroke="#111C35" stroke-width="3" stroke-linecap="round"/>
+  <text x="75" y="52" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="21" font-weight="700">VULON</text>
+  <text x="26" y="112" fill="#8090AD" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1.4">MENÚ PRINCIPAL</text>
+  <rect x="14" y="132" width="210" height="48" rx="12" fill="#243451"/>
+  <rect x="14" y="132" width="4" height="48" rx="2" fill="#F0A449"/>
+  <circle cx="40" cy="156" r="8" stroke="#F0A449" stroke-width="2"/>
+  <path d="M28 172c1-8 5-12 12-12s11 4 12 12" stroke="#F0A449" stroke-width="2" stroke-linecap="round"/>
+  <text x="62" y="161" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="14" font-weight="600">Jugadores</text>
+  <circle cx="40" cy="211" r="8" stroke="#8B9AB4" stroke-width="2"/><text x="62" y="216" fill="#AAB5C8" font-family="Arial,sans-serif" font-size="14">Equipos</text>
+  <rect x="31" y="250" width="18" height="16" rx="3" stroke="#8B9AB4" stroke-width="2"/><text x="62" y="264" fill="#AAB5C8" font-family="Arial,sans-serif" font-size="14">Administración</text>
+  <line x1="25" y1="884" x2="213" y2="884" stroke="#293751"/>
+  <circle cx="43" cy="919" r="17" fill="#314667"/><text x="37" y="924" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="12" font-weight="700">VC</text>
+  <text x="69" y="916" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="13" font-weight="600">Club Vulon</text><text x="69" y="934" fill="#91A0B8" font-family="Arial,sans-serif" font-size="11">Organización</text>
+  <rect x="238" width="1202" height="72" fill="#FFFFFF"/>
+  <line x1="238" y1="71.5" x2="1440" y2="71.5" stroke="#E7EAF0"/>
+  <text x="275" y="43" fill="#8B95A7" font-family="Arial,sans-serif" font-size="12">Dashboard</text><text x="338" y="43" fill="#B4BBC7" font-family="Arial,sans-serif" font-size="12">/</text><text x="352" y="43" fill="#29364D" font-family="Arial,sans-serif" font-size="12" font-weight="600">Jugadores</text>
+  <circle cx="1360" cy="36" r="17" fill="#FCEBD9"/><text x="1354" y="41" fill="#A96621" font-family="Arial,sans-serif" font-size="12" font-weight="700">AM</text>
+  <text x="275" y="130" fill="#18243A" font-family="Arial,sans-serif" font-size="30" font-weight="700">Jugadores</text>
+  <text x="275" y="157" fill="#778196" font-family="Arial,sans-serif" font-size="14">Administra y consulta los jugadores registrados en tu organización.</text>
+  <rect x="1194" y="105" width="207" height="46" rx="11" fill="#EFA34C"/><text x="1224" y="133" fill="#18243A" font-family="Arial,sans-serif" font-size="14" font-weight="700">＋  Agregar jugador</text>
+  <rect x="275" y="188" width="260" height="128" rx="16" fill="#FFFFFF" stroke="#E8EBF1"/>
+  <text x="297" y="219" fill="#7D8798" font-family="Arial,sans-serif" font-size="13">Total de jugadores</text><text x="297" y="267" fill="#18243A" font-family="Arial,sans-serif" font-size="34" font-weight="700">248</text>
+  <circle cx="493" cy="224" r="19" fill="#FFF2E2"/><path d="M486 224a7 7 0 1 1 14 0M482 237c1-6 5-9 11-9s10 3 11 9" stroke="#DC8B35" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="297" y="294" fill="#2C9A6D" font-family="Arial,sans-serif" font-size="12" font-weight="600">↑ 12% este mes</text>
+  <rect x="553" y="188" width="260" height="128" rx="16" fill="#FFFFFF" stroke="#E8EBF1"/>
+  <text x="575" y="219" fill="#7D8798" font-family="Arial,sans-serif" font-size="13">Activos</text><text x="575" y="267" fill="#18243A" font-family="Arial,sans-serif" font-size="34" font-weight="700">216</text>
+  <circle cx="771" cy="224" r="19" fill="#E6F6EF"/><circle cx="771" cy="224" r="7" fill="#36A779"/><text x="575" y="294" fill="#778196" font-family="Arial,sans-serif" font-size="12">87% de la plantilla</text>
+  <rect x="831" y="188" width="260" height="128" rx="16" fill="#FFFFFF" stroke="#E8EBF1"/>
+  <text x="853" y="219" fill="#7D8798" font-family="Arial,sans-serif" font-size="13">Pendientes</text><text x="853" y="267" fill="#18243A" font-family="Arial,sans-serif" font-size="34" font-weight="700">32</text>
+  <circle cx="1049" cy="224" r="19" fill="#FFF5DE"/><path d="M1049 214v11l7 4" stroke="#D29B2E" stroke-width="2" stroke-linecap="round"/><text x="853" y="294" fill="#778196" font-family="Arial,sans-serif" font-size="12">Requieren seguimiento</text>
+  <rect x="1109" y="188" width="292" height="128" rx="16" fill="#FFFFFF" stroke="#E8EBF1"/>
+  <text x="1131" y="219" fill="#7D8798" font-family="Arial,sans-serif" font-size="13">Nuevas altas</text><text x="1131" y="267" fill="#18243A" font-family="Arial,sans-serif" font-size="34" font-weight="700">18</text>
+  <circle cx="1359" cy="224" r="19" fill="#EDF0FF"/><path d="M1359 215v18M1350 224h18" stroke="#6274C7" stroke-width="2" stroke-linecap="round"/><text x="1131" y="294" fill="#778196" font-family="Arial,sans-serif" font-size="12">Durante los últimos 30 días</text>
+  <rect x="275" y="342" width="1126" height="566" rx="16" fill="#FFFFFF" stroke="#E8EBF1"/>
+  <text x="299" y="379" fill="#202C42" font-family="Arial,sans-serif" font-size="17" font-weight="700">Todos los jugadores</text><text x="299" y="402" fill="#8992A2" font-family="Arial,sans-serif" font-size="12">248 registros</text>
+  <rect x="914" y="358" width="220" height="38" rx="9" fill="#FFFFFF" stroke="#E1E5EC"/><circle cx="934" cy="376" r="6" stroke="#9AA3B2" stroke-width="1.5"/><path d="m939 381 5 5" stroke="#9AA3B2" stroke-width="1.5"/><text x="952" y="381" fill="#A2A9B5" font-family="Arial,sans-serif" font-size="12">Buscar jugador...</text>
+  <rect x="1145" y="358" width="112" height="38" rx="9" fill="#FFFFFF" stroke="#E1E5EC"/><text x="1160" y="381" fill="#576276" font-family="Arial,sans-serif" font-size="12">Estado  ▾</text>
+  <rect x="1268" y="358" width="109" height="38" rx="9" fill="#FFFFFF" stroke="#E1E5EC"/><text x="1282" y="381" fill="#576276" font-family="Arial,sans-serif" font-size="12">Equipo  ▾</text>
+  <rect x="275" y="421" width="1126" height="43" fill="#F8F9FB"/>
+  <text x="299" y="448" fill="#7E8797" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".5">JUGADOR</text><text x="633" y="448" fill="#7E8797" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".5">EQUIPO</text><text x="872" y="448" fill="#7E8797" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".5">ESTADO</text><text x="1062" y="448" fill="#7E8797" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing=".5">FECHA DE ALTA</text>
+  <g font-family="Arial,sans-serif">
+    <circle cx="319" cy="500" r="17" fill="#E8EDFF"/><text x="309" y="505" fill="#5369B8" font-size="10" font-weight="700">LM</text><text x="348" y="497" fill="#263247" font-size="13" font-weight="600">Lucía Martínez</text><text x="348" y="515" fill="#939BA9" font-size="11">lucia.m@email.com</text><text x="633" y="505" fill="#536075" font-size="12">Sub-18 · Femenino</text><rect x="872" y="487" width="67" height="25" rx="12" fill="#E8F6EF"/><circle cx="885" cy="499" r="3" fill="#35A477"/><text x="894" y="503" fill="#28845F" font-size="11" font-weight="600">Activo</text><text x="1062" y="505" fill="#536075" font-size="12">12 ago 2026</text><text x="1353" y="505" fill="#8791A1" font-size="18">···</text>
+    <line x1="299" y1="535" x2="1377" y2="535" stroke="#EFF1F5"/>
+    <circle cx="319" cy="569" r="17" fill="#FCEBDD"/><text x="309" y="574" fill="#BD7535" font-size="10" font-weight="700">JR</text><text x="348" y="566" fill="#263247" font-size="13" font-weight="600">Julián Rivera</text><text x="348" y="584" fill="#939BA9" font-size="11">julian.r@email.com</text><text x="633" y="574" fill="#536075" font-size="12">Sub-16 · Masculino</text><rect x="872" y="556" width="67" height="25" rx="12" fill="#E8F6EF"/><circle cx="885" cy="568" r="3" fill="#35A477"/><text x="894" y="572" fill="#28845F" font-size="11" font-weight="600">Activo</text><text x="1062" y="574" fill="#536075" font-size="12">10 ago 2026</text><text x="1353" y="574" fill="#8791A1" font-size="18">···</text>
+    <line x1="299" y1="604" x2="1377" y2="604" stroke="#EFF1F5"/>
+    <circle cx="319" cy="638" r="17" fill="#E6F3F1"/><text x="309" y="643" fill="#3D8A7D" font-size="10" font-weight="700">DG</text><text x="348" y="635" fill="#263247" font-size="13" font-weight="600">Diego Gómez</text><text x="348" y="653" fill="#939BA9" font-size="11">diego.g@email.com</text><text x="633" y="643" fill="#536075" font-size="12">Sub-14 · Masculino</text><rect x="872" y="625" width="93" height="25" rx="12" fill="#FFF4DD"/><circle cx="885" cy="637" r="3" fill="#D29B2E"/><text x="894" y="641" fill="#A9791F" font-size="11" font-weight="600">Pendiente</text><text x="1062" y="643" fill="#536075" font-size="12">08 ago 2026</text><text x="1353" y="643" fill="#8791A1" font-size="18">···</text>
+    <line x1="299" y1="673" x2="1377" y2="673" stroke="#EFF1F5"/>
+    <circle cx="319" cy="707" r="17" fill="#F0EAFE"/><text x="309" y="712" fill="#7658B6" font-size="10" font-weight="700">SM</text><text x="348" y="704" fill="#263247" font-size="13" font-weight="600">Sofía Morales</text><text x="348" y="722" fill="#939BA9" font-size="11">sofia.m@email.com</text><text x="633" y="712" fill="#536075" font-size="12">Sub-18 · Femenino</text><rect x="872" y="694" width="67" height="25" rx="12" fill="#E8F6EF"/><circle cx="885" cy="706" r="3" fill="#35A477"/><text x="894" y="710" fill="#28845F" font-size="11" font-weight="600">Activo</text><text x="1062" y="712" fill="#536075" font-size="12">05 ago 2026</text><text x="1353" y="712" fill="#8791A1" font-size="18">···</text>
+    <line x1="299" y1="742" x2="1377" y2="742" stroke="#EFF1F5"/>
+    <circle cx="319" cy="776" r="17" fill="#FCE9EA"/><text x="309" y="781" fill="#B95E68" font-size="10" font-weight="700">AP</text><text x="348" y="773" fill="#263247" font-size="13" font-weight="600">Andrés Pérez</text><text x="348" y="791" fill="#939BA9" font-size="11">andres.p@email.com</text><text x="633" y="781" fill="#536075" font-size="12">Sub-16 · Masculino</text><rect x="872" y="763" width="76" height="25" rx="12" fill="#F0F1F4"/><circle cx="885" cy="775" r="3" fill="#9199A6"/><text x="894" y="779" fill="#747D8C" font-size="11" font-weight="600">Inactivo</text><text x="1062" y="781" fill="#536075" font-size="12">02 ago 2026</text><text x="1353" y="781" fill="#8791A1" font-size="18">···</text>
+  </g>
+  <line x1="299" y1="811" x2="1377" y2="811" stroke="#EFF1F5"/><text x="299" y="850" fill="#929AAA" font-family="Arial,sans-serif" font-size="12">Mostrando 1–5 de 248 jugadores</text>
+  <rect x="1294" y="829" width="34" height="32" rx="8" fill="#F0A449"/><text x="1307" y="850" fill="#18243A" font-family="Arial,sans-serif" font-size="12" font-weight="700">1</text><rect x="1336" y="829" width="34" height="32" rx="8" fill="#FFFFFF" stroke="#E5E8EE"/><text x="1349" y="850" fill="#667084" font-family="Arial,sans-serif" font-size="12">2</text>
+</svg>

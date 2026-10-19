@@ -10,6 +10,7 @@
 
 .table_all{
     border-radius: var(--mantine-radius-md);
+    width: 100%;
     overflow: hidden;
 }
 .table_all thead th{

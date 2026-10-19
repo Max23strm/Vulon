@@ -3,7 +3,6 @@ import { StandardResponsePromise } from "@/interfaces/requests";
 import { cookies } from "next/headers";
 
 export const getAllPlayers = async (entity_uid?: string): StandardResponsePromise<playersData[]> => {
-
     const cookieStore = await cookies()
     const authToken = cookieStore.get('authToken')
     try {
@@ -22,7 +21,6 @@ export const getAllPlayers = async (entity_uid?: string): StandardResponsePromis
         if(!playersRes.success)  throw new Error(playersRes.error)
 
         const players = playersRes?.data ?? []
-
         return {
             success: true,
             data: players,
