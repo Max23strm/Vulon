@@ -78,18 +78,17 @@
     gap: 1rem;
     display: grid;
     grid-template-columns: 1fr;
-    a {
         text-decoration: none;
         .player_card {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             transition: all .5s;
+            cursor: pointer;
         }
         .player_card:hover{
             border-color:var(--mantine-primary-color-filled)
         }
-    }
     @media (min-width: 660px) {
         grid-template-columns: 1fr 1fr;
     }
