@@ -73,5 +73,20 @@
         "error_during_assigntation" : "Error assignating players",
         "error_getting_players" : "Error obtaining players",
         "team_updated" : "Team updated"
+    },
+    "Players":{
+        "add_player": "Add player",
+        "player_rooster": "Player rooster",
+        "registered_players": "Registered players",
+        "active": "Active",
+        "name": "Name",
+        "search": "Search",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "no_teams_assigned": "No teams assigned",
+        "state": "State",
+        "no_players": "No players",
+        "active_perc": "% active"
     }
 }
