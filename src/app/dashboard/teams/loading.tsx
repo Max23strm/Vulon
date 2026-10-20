@@ -1,9 +1,7 @@
-import React from 'react'
+import TeamsSkeleton from '@/app/components/Navigation/skeletons/TeamsSkeleton'
 
 const loading = () => {
-    return (
-        <div>loading</div>
-    )
+    return <TeamsSkeleton/>
 }
 
 export default loading

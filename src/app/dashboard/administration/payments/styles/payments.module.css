@@ -4,6 +4,51 @@
     gap:1.3rem;
 }
 
+.mainDataStyles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--mantine-primary-color-light);
+    gap: 1rem;
+}
+.dataDisplayed{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-right: 2rem;
+    .divider{
+        margin-left: 5rem;
+    };
+    div:not(:first-child){
+        display: none;
+    }
+
+    @media (min-width:868){
+        div:not(:first-child){
+            display: block;
+        }   
+    }
+}
+.cicleCard{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chartsConitainer{
+    display: none;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 1rem;
+    .mantine-Card-root{
+        position: relative;
+    }
+    @media (min-width:500){
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+    }
+}
 .editButtons {
     display: flex;
     flex-direction: row;

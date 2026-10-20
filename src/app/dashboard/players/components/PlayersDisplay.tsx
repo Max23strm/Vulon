@@ -67,33 +67,6 @@ const PlayersDisplay = ({ players }: { players: playersData[] }) => {
                     
                     { displayedPlayers.map((p) => (
                         <PlayerEditModal player={p}  key={`${p.player_uid} link`}/>
-                        // <Link href={`players/${p.player_uid}`} key={`${p.player_uid} link`}>
-                        //     <Card shadow="sm" padding="lg" withBorder className={styles.player_card}>
-                        //         <div>
-                        //             <Text size="lg" fw={500}>{`${p.firstName} ${p.last_name}`}</Text>
-                        //             <div>
-                        //                 {
-                        //                     p.assigned.length
-                        //                         ? p.assigned.map((team) => (
-                        //                             <Badge 
-                        //                                 variant="light"
-                        //                                 color="entityPrimary"
-                        //                                 key={p.player_uid + team}
-                        //                             >
-                        //                                 {team}
-                        //                             </Badge>
-                        //                         ))
-                        //                     : <Text size="sm" fw={300} color="grey">{t("no_teams_assigned")}</Text>
-                        //                 }
-                        //             </div>
-                        //         </div>
-                        //         {
-                        //             p.status === 0 ?
-                        //                 <Badge className={styles.badge} variant="transparent" color="red">{t('inactive')}</Badge> :
-                        //                 <Badge className={styles.badge} variant="transparent" color="green">{t('active')}</Badge>
-                        //         }
-                        //     </Card>
-                        // </Link>
                     ))}
                 </div> :
                 <Text ta={'center'} mt={'2rem'} size="xl">{t('no_players')}</Text>
