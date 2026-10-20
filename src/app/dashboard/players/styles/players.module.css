@@ -26,8 +26,7 @@
     gap: 1rem;
     display: flex;
     flex-direction: column;
-    color: var(--mantine-primary-color-contrast);
-    background: var(--mantine-primary-color-filled);
+    background: var(--mantine-primary-color-light);
     @media (min-width:879) {
         flex-direction: row;
     }
@@ -71,6 +70,12 @@
         }
     }
 
+}
+
+.teams{
+    display: flex;
+    flex-direction: row;
+    gap: .3rem;
 }
 
 .player_grid{

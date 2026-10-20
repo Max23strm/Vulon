@@ -2,9 +2,9 @@
   display: flex;
   gap: var(--mantine-spacing-md);
   justify-content: center;
-  @mixin smaller-than 755px {
+  /* @mixin smaller-than 755px {
     flex-direction: column;
-  }
+  } */
 }
 
 .controls {

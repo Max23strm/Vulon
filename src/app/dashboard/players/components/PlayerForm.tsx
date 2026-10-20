@@ -11,11 +11,8 @@ import { notifications } from '@mantine/notifications'
 import PlayerStatusBadge from './PlayerStatusBadge'
 import { useTranslations } from 'next-intl'
 import { postPlayerForm, putPlayerForm } from '@/app/requests/players_client'
-import { useContext } from 'react'
-import { getSession } from '@/app/services/cookies/serverSideStoring'
 import { useAppState } from '@/app/providers/StateProvider'
 
-type Response = { isSuccess: boolean; estado?: string; error?: unknown; player_uid?: string }
 
 interface FormEditInterface {
   player_info: playersDetailResponse;

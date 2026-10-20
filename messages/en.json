@@ -15,6 +15,7 @@
         "organization": "Organization",
         "payment_uid":"Payment detail",
         "payments":"Payments",
+        "Payments":"Payments",
         "player_uid":"Player detail",
         "players": "Players",
         "teams": "Teams"
@@ -73,6 +74,15 @@
         "error_during_assigntation" : "Error assignating players",
         "error_getting_players" : "Error obtaining players",
         "team_updated" : "Team updated"
+    },
+    "Payments":{
+        "total_this_month":"Total income for the current month",
+        "movements":"Movements",
+        "month":"Month",
+        "donations":"Donations",
+        "mensuality":"Mensuality",
+        "other":"Other",
+        "payments_average":"Average"
     },
     "Players":{
         "active_perc": "% active",

@@ -11,6 +11,8 @@ import { FilePlus, Download } from "@mynaui/icons-react";
 import dayjs from '@/helpers/dayjs'
 import DownloadModal from '@/app/components/adminComponents/DownloadModal'
 import { useMediaQuery } from '@mantine/hooks'
+import DataHeader from './DataHeader'
+import PaymentsChartSection from './PaymentsChartSection'
 
 const TableAndSelector = () => {
     const matches = useMediaQuery("(min-width: 900px)");
@@ -51,8 +53,6 @@ const TableAndSelector = () => {
             <Group justify='space-between' align='end'>
                 <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
                     <MonthPickerInput
-                        label="Mes"
-                        placeholder="Mes"
                         value={value}
                         onChange={handleDateChange}
                     />
@@ -85,6 +85,11 @@ const TableAndSelector = () => {
                     </Button>
                 </Group>
             </Group>
+            <DataHeader
+                dateValue={value}
+                handleDateChange={handleDateChange}
+            />
+            <PaymentsChartSection />
             <Stack
                 bg="var(--mantine-color-body)"
                 align="start"

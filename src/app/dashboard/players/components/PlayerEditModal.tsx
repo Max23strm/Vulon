@@ -1,11 +1,10 @@
 import { Alert, Badge, Card, Flex, Loader, Modal, Text } from '@mantine/core'
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import styles from "../styles/players.module.css";
 import { playersData, playersDetailResponse } from '@/interfaces/players';
 import PlayerForm from './PlayerForm';
 import { useDisclosure } from '@mantine/hooks';
 import { useTranslations } from 'next-intl';
-import dayjs from 'dayjs';
 import { playersDetailFetch } from '@/app/requests/players_client';
 import { useRouter } from 'next/navigation';
 
@@ -51,7 +50,7 @@ const PlayerEditModal = ({player}:{player: playersData}) => {
             <Card shadow="sm" padding="lg" withBorder className={styles.player_card} onClick={toggle}>
                 <div>
                     <Text size="lg" fw={500}>{`${player.firstName} ${player.last_name}`}</Text>
-                    <div>
+                    <div className={styles.teams}>
                         {
                             player.assigned.length
                                 ? player.assigned.map((team) => (
