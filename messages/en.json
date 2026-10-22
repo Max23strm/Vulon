@@ -22,6 +22,7 @@
     },
     "Alerts":{
         "back_home":"Back home",
+        "error_obtaining_information":"Error obtaining information",
         "not_found_body":"The page you are looking for does not exists",
         "not_found_title":"Page not found"
     },
@@ -79,6 +80,9 @@
         "total_this_month":"Total income for the current month",
         "movements":"Movements",
         "month":"Month",
+        "new": "New",
+        "new_payment": "New payment",
+        "new_payment_category": "New payment category",
         "donations":"Donations",
         "mensuality":"Mensuality",
         "other":"Other",

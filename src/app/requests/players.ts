@@ -3,7 +3,7 @@ import { playersData, playersStatsData } from "@/interfaces/players";
 import { StandardResponsePromise } from "@/interfaces/requests";
 import { cookies } from "next/headers";
 
-export const getAllPlayers = async (entity_uid?: string): StandardResponsePromise<playersData[]> => {
+export const getAllPlayers = async (entity_uid: string): StandardResponsePromise<playersData[]> => {
     const cookieStore = await cookies()
     const authToken = cookieStore.get('authToken')
     try {
