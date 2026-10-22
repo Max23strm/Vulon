@@ -13,6 +13,8 @@ import DownloadModal from '@/app/components/adminComponents/DownloadModal'
 import { useMediaQuery } from '@mantine/hooks'
 import DataHeader from './DataHeader'
 import PaymentsChartSection from './PaymentsChartSection'
+import PaymentModal from './PaymentModal'
+import RecurrentPaymentModal from './RecurrentPaymentModal'
 
 const TableAndSelector = () => {
     const matches = useMediaQuery("(min-width: 900px)");
@@ -61,7 +63,7 @@ const TableAndSelector = () => {
                     {
                         matches ? 
                             <Button
-                                size='sm'
+                                size='compact-sm'
                                 leftSection={<Download/>}
                                 variant='light'
                                 onClick={handleModal}
@@ -75,14 +77,16 @@ const TableAndSelector = () => {
                                 <Download/>
                             </ActionIcon>
                     }
-                    <Button
+                    {/* <Button
                         component={Link}
                         href={'/dashboard/administration/payments/new-payment'}
                         size='sm'
                         leftSection={<FilePlus/>}
                     >
                         Nuevo
-                    </Button>
+                    </Button> */}
+                    <RecurrentPaymentModal/>
+                    <PaymentModal/>
                 </Group>
             </Group>
             <DataHeader
