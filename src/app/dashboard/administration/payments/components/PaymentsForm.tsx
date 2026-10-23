@@ -1,34 +1,33 @@
 'use client'
-import { Button, Fieldset, Group, NumberInput, Select, Textarea, TextInput } from '@mantine/core'
+import { Button, Fieldset, Grid, GridCol, Group, NumberInput, Select, Textarea, TextInput } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { Dollar } from '@mynaui/icons-react'
 import styles from '../styles/components.module.css'
-import { playersData } from '@/interfaces/players'
-import { paymentTypesResponse } from '@/interfaces/payments'
-import { PaymentsTypesPageProps, PlayersPageProps } from '@/interfaces/fetchers'
-import Link from 'next/link'
+import { PaymentCat, paymentTypesResponse } from '@/interfaces/payments'
 import { useForm } from '@mantine/form'
 import dayjs from '@/helpers/dayjs'
 import { postPaymentForm } from '@/helpers/dataPoster'
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation'
 import { DatesProvider } from '@mantine/dates';
+import { PayOptionsForm } from './PaymentModal'
+import { playersData } from '@/interfaces/players'
+import { useTranslations } from 'next-intl'
+import { postPaymentForm_client } from '@/app/requests/payments_client'
 
 
-const PaymentsForm = ({playersData, payments, close} : {playersData: playersData[], payments: paymentTypesResponse[], close :()=>void}) => {
-
-    const router =  useRouter()
+const PaymentsForm = ({formOptions, close} : {formOptions: PayOptionsForm, close :()=>void}) => {
+    const t = useTranslations("Payments")
 
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: { player_uid: '', amount: 0, reference: '', date: dayjs().toDate(), payment_type_uid:'', comment:'' },
         validateInputOnBlur: true,
-        // functions will be used to validate values at corresponding key
         validate: {
-            player_uid: (value) => value.length < 2 ? 'Elija un jugador' : null,
-            amount: (value) => value <= 0 ? 'El monto debe ser mayor a 0' : null,
-            payment_type_uid: (value) => (value.length < 2 ? 'Elija un metodo de pago' : null),
-            comment: (value) => (value.length > 200 ? 'El comentario es muy largo' : null),
+            player_uid: (value) => value.length < 2 ? t('choose_a_player') : null,
+            amount: (value) => value <= 0 ? t('amount_more_than_0') : null,
+            payment_type_uid: (value) => (value.length < 2 ? t('choose_payment_method') : null),
+            comment: (value) => (value.length > 200 ? t('comment_shorter') : null),
         },
         transformValues: (values) => ({
             ...values,
@@ -39,122 +38,152 @@ const PaymentsForm = ({playersData, payments, close} : {playersData: playersData
 
     const handleSubmit = async ( formValue : FormValues ) => {
         notifications.show({
-          title: 'Creando registro de pago',
-          message: 'Espere un segundo por favor',
+          title: t('creating_payment_registration'),
+          message: t('hold'),
         })
 
-        const response = await postPaymentForm(formValue)
-
-        if(response.isSuccess) {
+        const response = await postPaymentForm_client(formValue)
+        console.log(response)
+        if(response.success) {
             notifications.show({
-                title: 'Éxito',
-                message:'Registro realizado con éxito',
+                title: t('success'),
+                message:t('successfuly_stored'),
                 color: 'green'
             })
-            router.push('/dashboard/administration/payments/')
+            close()
         } else {
             notifications.show({
-                title: 'Error',
-                message:'Ocurrió un error, intente nuevamente o contate a un administrador',
+                title: t('error'),
+                message:t('try_again'),
                 color: 'red'
             })
         }
 
     }
     
-
-
+    const handleCategoryChange = ( cat : string | null ) => {
+        if(!cat) {
+            form.setValues({
+                amount: 0,
+                payment_type_uid: ''
+            })
+        } else {
+            const categ = formOptions.paymentCat.find(c => c.payment_cat_uid === cat)
+            form.setValues({
+                amount: categ?.amount,
+                payment_type_uid: categ?.payment_type_uid
+            })
+        }
+    }
     return (
-        <form onSubmit={form.onSubmit(handleSubmit)} className={styles.form}>
-            <Fieldset className={styles.fieldSet}>
-                <Select
-                    className={styles.fullWidthElement}
-                    radius={'md'}
-                    withAsterisk
-                    searchable
-                    label="Jugador"
-                    data={playersData?.map((v : playersData ) => ({value: v.player_uid, label:`${v.last_name}, ${v.firstName}` }))}
-                    placeholder="Selecciona un jugador"
-                    key={form.key('player_uid')}
-                    {...form.getInputProps('player_uid')}
-                />
-
-                <NumberInput
-                    className={styles.fullWidthElement}
-                    radius={'md'}
-                    withAsterisk
-                    decimalScale={2}
-                    thousandSeparator=","
-                    label="Monto"
-                    leftSection={<Dollar/>}
-                    placeholder="Monto"
-                    key={form.key('amount')}
-                    {...form.getInputProps('amount')}
-                />
-                <TextInput
-                    className={styles.fullWidthElement}
-                    radius={'md'}
-                    label="Referencia"
-                    placeholder="Inserta referencia de depósito / pago"
-                    key={form.key('reference')}
-                    {...form.getInputProps('reference')}
-                />
-            </Fieldset>
-            <Fieldset className={styles.fieldSet}>
-                <DatesProvider settings={{locale:'es-mx'}}>
-                    <DatePickerInput
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Grid justify='flex-end'>
+                <GridCol span={{xs:12}} className={styles.fieldSet}>
+                    <Select
+                        className={styles.fullWidthElement}
+                        radius={'md'}
+                        onChange={handleCategoryChange}
+                        searchable
+                        label={t('categories')}
+                        data={formOptions.paymentCat?.map((v : PaymentCat ) => ({value: v.payment_cat_uid, label:`${v.name}` }))}
+                        placeholder={t('categories')}
+                    />
+                </GridCol>
+                <GridCol span={{xs:12, md:4}} className={styles.fieldSet}>
+                    <Select
+                        className={styles.fullWidthElement}
                         radius={'md'}
                         withAsterisk
-                        label="Fecha de ingreso"
-                        placeholder="Selecciones la fecha de ingreso"
-                        className={styles.fullWidthElement}
-                        key={form.key('date')}
-                        {...form.getInputProps('date')}
+                        searchable
+                        label={t('player')}
+                        data={formOptions.playersData?.map((v : playersData ) => ({value: v.player_uid, label:`${v.firstName} ${v.last_name}` }))}
+                        placeholder={t('player')}
+                        key={form.key('player_uid')}
+                        {...form.getInputProps('player_uid')}
                     />
-                </DatesProvider>
+                </GridCol>
+                <GridCol span={{xs:12, sm:6, md:4}} className={styles.fieldSet}>
 
-                <Select
-                    className={styles.fullWidthElement}
-                    radius={'md'}
-                    withAsterisk
-                    searchable
-                    data={payments?.map( (v : paymentTypesResponse) => ({value: v.payment_type_uid, label:v.payment_name}))}
-                    label="Tipo de pago"
-                    placeholder="Selecciona el tipo de pago"
-                    key={form.key('payment_type_uid')}
-                    {...form.getInputProps('payment_type_uid')}
-                >
+                    <NumberInput
+                        className={styles.fullWidthElement}
+                        radius={'md'}
+                        withAsterisk
+                        decimalScale={2}
+                        thousandSeparator=","
+                        label={t('amount')}
+                        leftSection={<Dollar/>}
+                        placeholder={t('amount')}
+                        key={form.key('amount')}
+                        {...form.getInputProps('amount')}
+                    />
+                </GridCol>
+                <GridCol span={{xs:12, sm:6, md:4}} className={styles.fieldSet}>
 
-                </Select>
-            </Fieldset>
+                    <TextInput
+                        className={styles.fullWidthElement}
+                        radius={'md'}
+                        label={t('reference')}
+                        placeholder={t('inset_reference')}
+                        key={form.key('reference')}
+                        {...form.getInputProps('reference')}
+                    />
+                </GridCol>
+                <GridCol span={{xs:12, sm:6}} className={styles.fieldSet}>
+                    <DatesProvider settings={{locale:'es-mx'}}>
+                        <DatePickerInput
+                            radius={'md'}
+                            withAsterisk
+                            label={t('income_date')}
+                            placeholder={t('select_income_date')}
+                            className={styles.fullWidthElement}
+                            key={form.key('date')}
+                            {...form.getInputProps('date')}
+                        />
+                    </DatesProvider>
+                    </GridCol>
 
-            <Textarea
-                className={styles.fullWidthElement}
-                radius={'md'}
-                label='Comentario'
-                placeholder='Ingresa algun comentario'
-                key={form.key('comment')}
-                {...form.getInputProps('comment')}
-            />
+                    <GridCol span={{xs:12, sm:6}} className={styles.fieldSet}>
+                        <Select
+                            className={styles.fullWidthElement}
+                            radius={'md'}
+                            withAsterisk
+                            searchable
+                            data={formOptions.payments?.map( (v : paymentTypesResponse) => ({value: v.payment_type_uid, label:v.payment_name}))}
+                            label={t('payment_type')}
+                            placeholder={t('select_payment_type')}
+                            key={form.key('payment_type_uid')}
+                            {...form.getInputProps('payment_type_uid')}
+                        >
 
-            <Group justify='space-between' className={styles.fullWidthElement}>
-                <Button 
-                    onClick={close}
-                    variant='subtle'
-                >
-                    Regresar
-                </Button>
-                <Button 
-                    type='submit'
-                    disabled={!form.isValid() || form.submitting}
-                    loading={form.submitting}
-                    variant='gradient'
-                >
-                    Enviar
-                </Button>
-            </Group>
-            
-        </form>
+                        </Select>
+                </GridCol>
+
+                <GridCol span={{xs:12}} className={styles.fieldSet}>
+                    <Textarea
+                        className={styles.fullWidthElement}
+                        radius={'md'}
+                        label={t('comment')}
+                        placeholder={t('insert_comment')}
+                        key={form.key('comment')}
+                        {...form.getInputProps('comment')}
+                    />
+                </GridCol>
+
+                <GridCol span={{xs:'content'}}>
+                    <Button 
+                        type="submit"
+                        disabled={!form.isValid() || form.submitting}
+                        loading={form.submitting}
+                        variant='gradient'
+                    >
+                        {t('save')}
+                    </Button>
+
+                </GridCol>
+
+                
+            </Grid>
+         </form>
     )
 }
 

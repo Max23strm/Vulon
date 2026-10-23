@@ -7,9 +7,9 @@ import PaymentsForm from './PaymentsForm'
 import { useAppState } from '@/app/providers/StateProvider'
 import { getPlayersClient } from '@/app/requests/players_client'
 import { playersData } from '@/interfaces/players'
-import { paymentTypesFetch_client } from '@/app/requests/payments_client'
-import { paymentTypesResponse } from '@/interfaces/payments'
-type optionsForm = {playersData: playersData[], payments: paymentTypesResponse[]}
+import { paymentTypesCatFetch_client, paymentTypesFetch_client } from '@/app/requests/payments_client'
+import { PaymentCat, paymentTypesResponse } from '@/interfaces/payments'
+export type PayOptionsForm = {playersData: playersData[], payments: paymentTypesResponse[], paymentCat: PaymentCat[]}
 
 const PaymentModal = () => {
     const t = useTranslations("Payments")
@@ -17,7 +17,7 @@ const PaymentModal = () => {
     const [opened, { toggle, close }] = useDisclosure();
     const [loading, setLoading] = useState(false)
     const [errorFetched, setErrorFetched] = useState(false)
-    const [formOptions, setFormOptions] = useState<optionsForm>({playersData:[], payments:[]})
+    const [formOptions, setFormOptions] = useState<PayOptionsForm>({playersData:[], payments:[], paymentCat: []})
     const entity_uid = useAppState((state) => state.entity.entity_uid);
     
     const getOptions = useCallback(async()=>{
@@ -26,8 +26,8 @@ const PaymentModal = () => {
             setLoading(true)
             const responses = await Promise.allSettled([
                 getPlayersClient(entity_uid),
-                paymentTypesFetch_client(entity_uid)
-                
+                paymentTypesFetch_client(entity_uid),
+                paymentTypesCatFetch_client(entity_uid)
             ])
             const err = responses.find(r =>r.status === 'rejected' || !r.value.success)
             if(err) {
@@ -38,10 +38,11 @@ const PaymentModal = () => {
             }
             setFormOptions({
                 playersData: responses[0].status === 'fulfilled' ? responses[0]?.value?.data as playersData[] : [],
-                payments: responses[1].status === 'fulfilled' ? responses[1]?.value?.data as paymentTypesResponse[] : []
+                payments: responses[1].status === 'fulfilled' ? responses[1]?.value?.data as paymentTypesResponse[] : [],
+                paymentCat: responses[2].status === 'fulfilled' ? responses[2]?.value?.data as PaymentCat[] : [],
             })
             setLoading(false)
-
+            console.log(responses)
         }
     },[opened])
 
@@ -64,7 +65,7 @@ const PaymentModal = () => {
                         errorFetched ? <Alert variant="light" radius="lg" color="red" withCloseButton={false} icon={<DangerOctagon/>}>
                             {tAl('error_obtaining_information')}
                         </Alert> :
-                        <PaymentsForm playersData={formOptions.playersData} payments={[]} close={close}/>
+                        <PaymentsForm formOptions={formOptions} close={close}/>
                 }
             </Modal>
         </div>
