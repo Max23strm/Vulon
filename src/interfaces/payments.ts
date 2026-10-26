@@ -9,8 +9,18 @@ export interface paymentsResponse {
 
 export interface paymentTypesResponse {
     payment_type_uid: string;
+    is_system: 0 | 1;
     payment_name: string;
 }
+
+export interface PaymentCat {
+    payment_cat_uid:   string;
+    name:              string;
+    amount:            number;
+    payment_type_uid:  string;
+    payment_type_name: string;
+}
+
 
 export interface PaymentDetails {
     payment_uid:       string;

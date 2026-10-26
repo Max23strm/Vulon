@@ -2,7 +2,7 @@
 import { Button, Fieldset, Group, NumberInput, Select, Textarea, TextInput } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { Dollar } from '@mynaui/icons-react'
-import styles from '../styles/components.module.css'
+import styles from '../../styles/components.module.css'
 import { playersData } from '@/interfaces/players'
 import { paymentTypesResponse } from '@/interfaces/payments'
 import { PaymentsTypesPageProps, PlayersPageProps } from '@/interfaces/fetchers'

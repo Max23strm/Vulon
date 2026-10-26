@@ -15,7 +15,7 @@ const page = async () => {
 
     const dataPromise = await Promise.allSettled([
         getAllPlayersStats(entity_uid),
-        getAllPlayers(entity_uid)
+        getAllPlayers(entity_uid ?? '')
     ])
     
 
