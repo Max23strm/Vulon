@@ -1,5 +1,5 @@
-import { PaymentsTypesPageProps } from "@/interfaces/fetchers";
-import { PaymentCat, paymentTypesResponse } from "@/interfaces/payments";
+import { PaymentDetailResponse } from "@/interfaces/fetchers";
+import { PaymentCat, PaymentDetails, PaymentsMonthStats, paymentsResponse, paymentTypesResponse } from "@/interfaces/payments";
 import { StandardResponsePromise } from "@/interfaces/requests";
 
 export const paymentTypesFetch_client = async (entity_uid: string): StandardResponsePromise<paymentTypesResponse[]> => {
@@ -38,6 +38,110 @@ export const paymentTypesFetch_client = async (entity_uid: string): StandardResp
     }
 
 };
+
+export const paymentsGeneralFetch = async (requestedDate : string ): StandardResponsePromise<paymentsResponse[]> => {
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+
+    try {
+        if(!requestedDate) throw new Error('Date is required')
+        const paymentRes = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/payments?date=" + requestedDate, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+        })
+
+        const patmentResObj = (await paymentRes.json())
+
+        if(!patmentResObj.success)  throw new Error(patmentResObj.error)
+
+        const payments = patmentResObj?.data ?? []
+        return {
+            success: true,
+            data: payments,
+            error: null,
+        };
+    
+
+    } catch (err) {
+        return{
+            success: false,
+            data: null,
+            error: err,
+        }
+    }
+};
+
+export const monthlyPaymentsStats = async (date: string): StandardResponsePromise<PaymentsMonthStats[]> => {
+
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+
+    try {
+        if(!date) throw new Error('Date is required')
+        const paymentRes = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/payments/stats?date=" + date, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+        })
+
+        const patmentResObj = (await paymentRes.json())
+
+        if(!patmentResObj.success)  throw new Error(patmentResObj.error)
+
+        const payments = patmentResObj?.data ?? []
+        return {
+            success: true,
+            data: payments,
+            error: null,
+        };
+
+
+    } catch (e) {
+        return {
+            data:null,
+            success: false,
+            error: e
+        }
+    }
+
+};
+
+export const paymentsDetailFetch = async (requestedPayment : string ): StandardResponsePromise<PaymentDetails> => {
+    const cookies = document.cookie.split('; ');
+    const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
+
+    try {
+        if(!requestedPayment) throw new Error('Payment_uid is required')
+        const payment_response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/api/payments/paymentById/" + requestedPayment, {
+            cache: 'no-store',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken?.split('=')[1]}`,
+            },
+        }, )
+        const response = (await payment_response.json())
+
+        return {
+            data: response.data,
+            success: true,
+            error : null,
+        };
+    
+
+    } catch (err) {
+        return {
+            data: null,
+            success: false,
+            error: `${err}`,
+        };
+    }
+};
+
 
 export const paymentTypesCatFetch_client = async (entity_uid: string): StandardResponsePromise<PaymentCat[]> => {
 

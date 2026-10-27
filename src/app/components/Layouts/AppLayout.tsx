@@ -6,7 +6,6 @@ import {
   AppShellNavbar,
   Image,
   NavLink,
-  Text,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import NavBar from "../Navigation/NavBar";
@@ -17,6 +16,7 @@ import { useAppState } from "@/app/providers/StateProvider";
 import ThemeSwitcher from "../Navigation/ThemeSwitcher";
 import UserAvatar from "../Navigation/UserAvatar";
 import VulonLogo from "@public/Vulon.svg";
+import PageTitle from "../Navigation/PageTitle";
 function AppLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle, close }] = useDisclosure();
   const entity = useAppState((state) => state.entity);
@@ -69,7 +69,10 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       </AppShellNavbar>
 
       <AppShellMain className={styles.main_section}>
-        <BreadCrumbs />
+        <div className={styles.title_header}>
+          <BreadCrumbs />
+          <PageTitle/>
+        </div>
         {children}
       </AppShellMain>
     </AppShell>

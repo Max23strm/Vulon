@@ -1,53 +1,82 @@
-import { Card } from '@mantine/core'
+import { Alert, Card, Skeleton } from '@mantine/core'
 import React from 'react'
 import styles from '../styles/payments.module.css'
 import { DonutChart, LineChart } from '@mantine/charts';
-import { chartData } from './fakeData';
 import { useAppState } from '@/app/providers/StateProvider';
 import { useFormatter, useTranslations } from 'next-intl';
-type CircleItem = { name: 'Donations' | 'Mensuality' | 'Other'; value: number; color: string };
-const PaymentsChartSection = () => {
+import { PaymentsMonthStats } from '@/interfaces/payments';
+
+type CircleItem = { name: string; value: number; color?: string };
+
+const PALETTE = [
+  'blue', 'teal', 'grape', 'orange', 'cyan', 'pink',
+  'lime', 'indigo', 'red', 'yellow', 'violet', 'green',
+];
+
+const PaymentsChartSection = ({fetchedStats, loading}:{loading:boolean, fetchedStats: {response:PaymentsMonthStats[], error: string | null}}) => {
     const format = useFormatter();
     const currency_code = useAppState((state) => state.entity.currency_code);
     const t = useTranslations('Payments')
 
     if(!currency_code) return
 
-    type Category = 'Donations' | 'Mensuality' | 'Other';
-    type CircleItem = { name: Category; value: number; color: string };
 
-    const baseCategories: CircleItem[] = [
-        { name: 'Donations', value: 0, color: 'entityPrimary.7' },
-        { name: 'Mensuality', value: 0, color: 'entitySecondary.7' },
-        { name: 'Other', value: 0, color: 'entityTertiary.7' },
-    ];
+    if(fetchedStats.error) {
+        return <Alert/>
+    }
 
-    const circleData: CircleItem[] = baseCategories.map((item) => ({
-    ...item,
-    value: chartData.reduce((sum, d) => sum + d[item.name], 0),
-    }));
+    if(loading) {
+        return <div className={styles.chartsConitainer}>
+            <Skeleton height={300}/>
+            <Skeleton height={300}/>
+        </div>
+    }
+    const sortedData: CircleItem[] = fetchedStats.response.reduce((circ, day) => {
+        const dayKeys = Object.keys(day)
+        
+        dayKeys.forEach(k => {
+            if(k !== 'date') {
+                if(!circ.some( item => item.name === k)) {
+                    circ.push({ name: k, value: day[k] })
+                } else {
+                    const i = circ.findIndex( e => e.name === k)
+                    circ[i].value += day[k]
+                }
+            }
+        })
+
+        return circ
+    },[] as CircleItem[]).sort((a, b)=>b.value - a.value).map((item, index ) => {
+        return{
+            ...item,
+            color : `${PALETTE[index % PALETTE.length]}.6`
+        }
+    })
+
+    const circleData = [
+        { name: sortedData?.[0]?.name, value: sortedData?.[0]?.value, color: sortedData[0]?.color ?? 'entityPrimary.7' },
+        { name: sortedData?.[1]?.name, value: sortedData?.[1]?.value, color: sortedData[1]?.color ?? 'entitySecondary.7' },
+        { name: t('other'), value: sortedData.reduce((tot, item, index) =>   tot +( index > 1 ? item?.value : 0),0), color: 'entityTertiary.7' },
+    ]
+    
+    const lineChartSeries = sortedData.map((item ) => ({ label:item.name, name: item.name, color: item.color }))
 
     return (
         <div className={styles.chartsConitainer}>
             <Card shadow='sm'>
                 <LineChart
-                    data={chartData}
+                    data={fetchedStats.response}
                     curveType="monotone"
                     tickLine="x"
                     gridAxis="none"
                     withYAxis={false}
                     withDots={false}
                     withLegend
-                    withTooltip={false}
                     valueFormatter={(value) => format.number(value, {style:'currency', currency:currency_code})}
                     legendProps={{ verticalAlign: 'bottom'}}
                     h={300}
                     dataKey="date"
-                    series={[
-                        { label:t("donations"),name: 'Donations', color: 'entityPrimary.7' },
-                        { label:t("mensuality"),name: 'Mensuality', color: 'entitySecondary.7' },
-                        { label:t("other"),name: 'Other', color: 'entityTertiary.7' },
-                    ]}
+                    series={lineChartSeries}
                 />
             </Card>
             <Card shadow='sm' className={styles.cicleCard}>

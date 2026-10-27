@@ -10,7 +10,7 @@ export default function EnityLayout({ children }: { children: React.ReactNode;})
               padding="md"
             //   className={styles.main_background}
         >
-                <span className={styles.main_section_decoration}></span>
+                <span className={styles.main_selector_decoration}></span>
                 <AppShellHeader className={styles.header_con_logo}>
                     <BasicNavbar/>
                 </AppShellHeader>

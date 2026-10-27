@@ -10,10 +10,19 @@
 
 .table_all{
     border-radius: var(--mantine-radius-md);
-    overflow: hidden;
+    background-color: var(--mantine-color-body);
+    box-shadow: var(--mantine-shadow-sm);
+    width: 100%;
+}
+
+.table_all thead th:first-child{
+    border-radius: var(--mantine-radius-md) 0 0 0;
+}
+.table_all thead th:last-child{
+    border-radius: 0 var(--mantine-radius-md) 0 0;
 }
 .table_all thead th{
-    /* background-color: var(--mantine-color-primary-pitz-light-color); */
+    background-color: var(--mantine-primary-color-light);
     text-align: center;
     /* color: var(--mantine-color-dark-8); */
     backdrop-filter: blur(10px)

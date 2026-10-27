@@ -12,6 +12,7 @@ export interface paymentTypesResponse {
     is_system: 0 | 1;
     payment_name: string;
 }
+export type PaymentsMonthStats = {date: string} & Record<string, number> 
 
 export interface PaymentCat {
     payment_cat_uid:   string;

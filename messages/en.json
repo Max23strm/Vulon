@@ -77,6 +77,10 @@
         "team_updated" : "Team updated"
     },
     "Payments":{
+        "payment_amount": "Payment amount",
+        "payment_name": "Payment type",
+        "payment_date": "Date",
+        "registered_by": "Registered by",
         "total_this_month":"Total income for the current month",
         "movements":"Movements",
         "month":"Month",
