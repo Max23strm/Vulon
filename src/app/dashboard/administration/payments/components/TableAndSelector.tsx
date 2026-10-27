@@ -1,10 +1,9 @@
 'use client'
-import { paymentsGeneralFetch } from '@/helpers/dataFetcher'
 import { ActionIcon, Button, Group, Stack } from '@mantine/core'
 import { DatesProvider, MonthPickerInput } from '@mantine/dates'
 import { useCallback, useEffect, useState } from 'react'
 import PaymentsTable from './PaymentTable'
-import { paymentsResponse } from '@/interfaces/payments'
+import { PaymentsMonthStats, paymentsResponse } from '@/interfaces/payments'
 import ErrorAlert from '@/app/components/InformationDisplay/ErrorAlert'
 import Link from 'next/link'
 import { FilePlus, Download } from "@mynaui/icons-react";
@@ -15,6 +14,7 @@ import DataHeader from './DataHeader'
 import PaymentsChartSection from './PaymentsChartSection'
 import PaymentModal from './PaymentModal'
 import RecurrentPaymentModal from './RecurrentPaymentModal'
+import { monthlyPaymentsStats, paymentsGeneralFetch } from '@/app/requests/payments_client'
 
 const TableAndSelector = () => {
     const matches = useMediaQuery("(min-width: 900px)");
@@ -22,15 +22,27 @@ const TableAndSelector = () => {
     const [value, setValue] = useState(dayjs().format('YYYY-MM-DD'))
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [fetchedPayments, setfetchedPayments] = useState<{response:paymentsResponse[], error: string | null}>({response:[], error:null})
+    const [fetchedStats, setfetchedStats] = useState<{response:PaymentsMonthStats[], error: string | null}>({response:[], error:null})
     const [loading, setLoading] = useState(true)
     const makeCAll = useCallback( async ()=>{
         setLoading(true)
-        const { payments, errors } = await paymentsGeneralFetch(value);
+        const responses = await Promise.allSettled([
+            paymentsGeneralFetch(value),
+            monthlyPaymentsStats(value)
+        ])
 
-        if(errors.payments){
-            setfetchedPayments({response:[], error: errors.payments})
+        const stats = responses[1].status === 'fulfilled' ? responses[1].value : {data: null, error: responses[1].reason, success: false}
+        const table = responses[0].status === 'fulfilled' ? responses[0].value : {data: null, error: responses[0].reason, success: false}
+
+        if(!table.success){
+            setfetchedPayments({response:[], error: table.error})
         } else {
-            setfetchedPayments({response:payments ?? [], error:null})
+            setfetchedPayments({response:table?.data ?? [], error:null})
+        }
+        if(!stats.success){
+            setfetchedPayments({response:[], error: stats.error})
+        } else {
+            setfetchedStats({response:stats?.data ?? [], error:null})
         }
         setLoading(false)
     },[value])
@@ -47,7 +59,6 @@ const TableAndSelector = () => {
     const handleModal = () => {
         setIsModalOpen(prev => !prev)
     }
-    
 
     return (
         <>  
@@ -77,31 +88,20 @@ const TableAndSelector = () => {
                                 <Download/>
                             </ActionIcon>
                     }
-                    {/* <Button
-                        component={Link}
-                        href={'/dashboard/administration/payments/new-payment'}
-                        size='sm'
-                        leftSection={<FilePlus/>}
-                    >
-                        Nuevo
-                    </Button> */}
                     <RecurrentPaymentModal/>
                     <PaymentModal/>
                 </Group>
             </Group>
             <DataHeader
-                dateValue={value}
-                handleDateChange={handleDateChange}
+                fetchedPayments={fetchedPayments}
+                loading={loading}
             />
-            <PaymentsChartSection />
+            <PaymentsChartSection fetchedStats={fetchedStats} loading={loading}/>
             <Stack
-                bg="var(--mantine-color-body)"
                 align="start"
                 justify="center"
                 gap="md"
             >
-
-                <ErrorAlert errorMessage={fetchedPayments.error}/>
                 <PaymentsTable payments={fetchedPayments.response} loading={loading} matches={matches}/>
 
             </Stack>

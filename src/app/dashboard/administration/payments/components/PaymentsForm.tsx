@@ -18,7 +18,7 @@ import { postPaymentForm_client } from '@/app/requests/payments_client'
 
 const PaymentsForm = ({formOptions, close} : {formOptions: PayOptionsForm, close :()=>void}) => {
     const t = useTranslations("Payments")
-
+    const router = useRouter()
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: { player_uid: '', amount: 0, reference: '', date: dayjs().toDate(), payment_type_uid:'', comment:'' },
@@ -43,7 +43,6 @@ const PaymentsForm = ({formOptions, close} : {formOptions: PayOptionsForm, close
         })
 
         const response = await postPaymentForm_client(formValue)
-        console.log(response)
         if(response.success) {
             notifications.show({
                 title: t('success'),
@@ -51,6 +50,7 @@ const PaymentsForm = ({formOptions, close} : {formOptions: PayOptionsForm, close
                 color: 'green'
             })
             close()
+            router.refresh()
         } else {
             notifications.show({
                 title: t('error'),
