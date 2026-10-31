@@ -8,7 +8,7 @@ import { JSX } from 'react'
 import { SimpleExpense } from '@/interfaces/expenses';
 import styles from '@/app/components/styles/table.module.css'
 
-const ExpensesTable = ({expenses, loading, matches} : {expenses: SimpleExpense[], loading: boolean, matches:boolean}) => {
+const ExpensesTable = ({expenses, matches} : {expenses: SimpleExpense[], matches:boolean}) => {
 
     let rows : JSX.Element[] = []
     if(expenses?.length) {
@@ -43,15 +43,13 @@ const ExpensesTable = ({expenses, loading, matches} : {expenses: SimpleExpense[]
                     <TableTh></TableTh>
                 </TableTr>
                 </TableThead>
-                {
-                    !loading && 
-                    <TableTbody className={styles.table_body}>{rows}</TableTbody>
-                }
-                </Table>
-                <Container>
-                    { loading && <Loader color='#0C5C7A' size="lg" type="dots" />} 
-                    { (!rows.length && !loading) && <NoRowsAlert/> }
-                </Container>
+               
+                <TableTbody className={styles.table_body}>{rows}</TableTbody>
+                
+            </Table>
+            <Container mt={'1rem'}>
+                { (!rows.length) && <NoRowsAlert/> }
+            </Container>
         </>
     )
 }

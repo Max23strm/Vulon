@@ -15,45 +15,39 @@ import PaymentsChartSection from './PaymentsChartSection'
 import PaymentModal from './PaymentModal'
 import RecurrentPaymentModal from './RecurrentPaymentModal'
 import { monthlyPaymentsStats, paymentsGeneralFetch } from '@/app/requests/payments_client'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-const TableAndSelector = () => {
+const TableAndSelector = ({
+    fetchedPayments,
+    date,
+    fetchedStats
+}: {
+    date:string
+    fetchedPayments:paymentsResponse[],
+    fetchedStats:PaymentsMonthStats[]
+}) => {
     const matches = useMediaQuery("(min-width: 900px)");
 
-    const [value, setValue] = useState(dayjs().format('YYYY-MM-DD'))
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [fetchedPayments, setfetchedPayments] = useState<{response:paymentsResponse[], error: string | null}>({response:[], error:null})
-    const [fetchedStats, setfetchedStats] = useState<{response:PaymentsMonthStats[], error: string | null}>({response:[], error:null})
-    const [loading, setLoading] = useState(true)
-    const makeCAll = useCallback( async ()=>{
-        setLoading(true)
-        const responses = await Promise.allSettled([
-            paymentsGeneralFetch(value),
-            monthlyPaymentsStats(value)
-        ])
+    const [loading, setLoading] = useState(false)
+ 
 
-        const stats = responses[1].status === 'fulfilled' ? responses[1].value : {data: null, error: responses[1].reason, success: false}
-        const table = responses[0].status === 'fulfilled' ? responses[0].value : {data: null, error: responses[0].reason, success: false}
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
 
-        if(!table.success){
-            setfetchedPayments({response:[], error: table.error})
+    const handleDateChange = (value: string | null) => {
+        const params = new URLSearchParams(searchParams.toString())
+
+        if (value) {
+            const date = dayjs(value).format('YYYY-MM-DD')
+            params.set('date', date)
         } else {
-            setfetchedPayments({response:table?.data ?? [], error:null})
+            params.delete('date')
         }
-        if(!stats.success){
-            setfetchedPayments({response:[], error: stats.error})
-        } else {
-            setfetchedStats({response:stats?.data ?? [], error:null})
-        }
-        setLoading(false)
-    },[value])
 
-    useEffect(()=>{
-        makeCAll()
-    },[makeCAll])
-
-    const handleDateChange = (value : string | null) => {
-        if( value === null) setValue(dayjs(value).format('YYYY-MM-DD'))
-        else setValue(value)
+        const query = params.toString()
+        router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
     }
 
     const handleModal = () => {
@@ -66,7 +60,7 @@ const TableAndSelector = () => {
             <Group justify='space-between' align='end'>
                 <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
                     <MonthPickerInput
-                        value={value}
+                        value={date}
                         onChange={handleDateChange}
                     />
                 </DatesProvider>
@@ -96,13 +90,13 @@ const TableAndSelector = () => {
                 fetchedPayments={fetchedPayments}
                 loading={loading}
             />
-            <PaymentsChartSection fetchedStats={fetchedStats} loading={loading}/>
+            <PaymentsChartSection fetchedStats={fetchedStats}/>
             <Stack
                 align="start"
                 justify="center"
                 gap="md"
             >
-                <PaymentsTable payments={fetchedPayments.response} loading={loading} matches={matches}/>
+                <PaymentsTable payments={fetchedPayments} loading={loading} matches={matches}/>
 
             </Stack>
         </>
