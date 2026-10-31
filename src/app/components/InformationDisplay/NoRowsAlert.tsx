@@ -7,7 +7,7 @@ const NoRowsAlert = () => {
         <Alert 
             className={styles.alert}
             variant="light" 
-            color="cyan" 
+            color="entityPrimary" 
             radius="lg"
             title="Sin datos para mostrar" 
             withCloseButton={false} 

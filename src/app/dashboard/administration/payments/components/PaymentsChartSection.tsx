@@ -13,7 +13,7 @@ const PALETTE = [
   'lime', 'indigo', 'red', 'yellow', 'violet', 'green',
 ];
 
-const PaymentsChartSection = ({fetchedStats, loading}:{loading:boolean, fetchedStats: {response:PaymentsMonthStats[], error: string | null}}) => {
+const PaymentsChartSection = ({fetchedStats}:{fetchedStats: PaymentsMonthStats[]}) => {
     const format = useFormatter();
     const currency_code = useAppState((state) => state.entity.currency_code);
     const t = useTranslations('Payments')
@@ -21,17 +21,7 @@ const PaymentsChartSection = ({fetchedStats, loading}:{loading:boolean, fetchedS
     if(!currency_code) return
 
 
-    if(fetchedStats.error) {
-        return <Alert/>
-    }
-
-    if(loading) {
-        return <div className={styles.chartsConitainer}>
-            <Skeleton height={300}/>
-            <Skeleton height={300}/>
-        </div>
-    }
-    const sortedData: CircleItem[] = fetchedStats.response.reduce((circ, day) => {
+    const sortedData: CircleItem[] = fetchedStats.reduce((circ, day) => {
         const dayKeys = Object.keys(day)
         
         dayKeys.forEach(k => {
@@ -65,7 +55,7 @@ const PaymentsChartSection = ({fetchedStats, loading}:{loading:boolean, fetchedS
         <div className={styles.chartsConitainer}>
             <Card shadow='sm'>
                 <LineChart
-                    data={fetchedStats.response}
+                    data={fetchedStats}
                     curveType="monotone"
                     tickLine="x"
                     gridAxis="none"

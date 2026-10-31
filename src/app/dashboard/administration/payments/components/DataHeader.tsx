@@ -3,14 +3,14 @@ import styles from '../styles/payments.module.css'
 import { useFormatter, useTranslations } from 'next-intl'
 import { useAppState } from '@/app/providers/StateProvider'
 import { paymentsResponse } from '@/interfaces/payments'
-const DataHeader = ({fetchedPayments, loading}:{fetchedPayments:{response:paymentsResponse[], error: string | null},loading: boolean}) => {
+const DataHeader = ({fetchedPayments, loading}:{fetchedPayments:paymentsResponse[] ,loading: boolean}) => {
     const format = useFormatter();
     const currency_code = useAppState((state) => state.entity.currency_code);
 
     const t = useTranslations('Payments')
     if(!currency_code) return
 
-    const statsData = fetchedPayments.response.reduce((totals, elem) => {
+    const statsData = fetchedPayments.reduce((totals, elem) => {
 
         totals.total += elem?.amount ?? 0
         totals.movements += 1
