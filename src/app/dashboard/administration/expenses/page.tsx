@@ -2,11 +2,9 @@ import { Container } from '@mantine/core'
 import FullPage from './components/FullPage'
 import dayjs from 'dayjs';
 import { connection } from 'next/server';
-import { fetchMonthlyPaymentsStats, fetchPaymentsGeneral } from '@/app/requests/payments';
-import { PaymentsMonthStats, paymentsResponse } from '@/interfaces/payments';
 import ErrorAlert from '@/app/components/InformationDisplay/ErrorAlert';
-import { fetchMonthlyExpenses } from '@/app/requests/expenses';
-import { SimpleExpense } from '@/interfaces/expenses';
+import { fetchExpensesInfo, fetchMonthlyExpenses } from '@/app/requests/expenses';
+import { ExpensesInfo, SimpleExpense } from '@/interfaces/expenses';
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -19,6 +17,7 @@ const page = async ({searchParams}:{searchParams: Promise<{date: string}>}) => {
     const handleDateChange = async (newDate: string) => {
         return await Promise.allSettled([
             fetchMonthlyExpenses(newDate),
+            fetchExpensesInfo(currentDate),
             // fetchMonthlyPaymentsStats(newDate),
         ])
     }
@@ -35,10 +34,11 @@ const page = async ({searchParams}:{searchParams: Promise<{date: string}>}) => {
     }
 
     const  expList = currentData[0].status === 'fulfilled' ? currentData[0].value.data as SimpleExpense[] : []
+    const  expHeader = currentData[1].status === 'fulfilled' ? currentData[1].value.data as ExpensesInfo : null
 
     return (
         <Container fluid>
-            <FullPage date={date ?? currentDate} expList={expList}/>
+            <FullPage date={date ?? currentDate} expList={expList} headerInfo={expHeader}/>
         </Container>
     )
 }

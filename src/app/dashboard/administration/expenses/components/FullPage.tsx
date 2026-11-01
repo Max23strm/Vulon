@@ -8,7 +8,7 @@ import { FilePlus, Download } from "@mynaui/icons-react";
 import dayjs from '@/helpers/dayjs'
 import ExpensesTable from './ExpensesTable'
 import { expensesGeneralFetch } from '@/helpers/dataFetcher'
-import { SimpleExpense } from '@/interfaces/expenses'
+import { ExpensesInfo, SimpleExpense } from '@/interfaces/expenses'
 import DownloadModal from '@/app/components/adminComponents/DownloadModal'
 import { useMediaQuery } from '@mantine/hooks'
 import { useTranslations } from 'next-intl'
@@ -16,7 +16,7 @@ import ButtonSection from './ButtonSection'
 import MainTiles from './MainTiles'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-const FullPage = ({date, expList}:{date: string, expList: SimpleExpense[]}) => {
+const FullPage = ({date, expList, headerInfo}:{date: string, expList: SimpleExpense[], headerInfo: ExpensesInfo | null}) => {
     const matches = useMediaQuery("(min-width: 900px)");
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -44,18 +44,20 @@ const FullPage = ({date, expList}:{date: string, expList: SimpleExpense[]}) => {
 
 
     return (
-        <Grid>
+        <Grid justify='flex-end'>
             <ButtonSection
                 isModalOpen={isModalOpen}
                 handleModal={handleModal}
-                value={date}
-                handleDateChange={handleDateChange}
             
             />
-            <MainTiles/>
-            <GridCol span={{sm:12}}>
-                <ExpensesTable expenses={expList} matches={matches}/>
-            </GridCol>
+            <MainTiles headerInfo={headerInfo}/>
+            <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
+                <MonthPickerInput
+                    value={date}
+                    onChange={handleDateChange}
+                />
+            </DatesProvider>
+            <ExpensesTable expenses={expList} matches={matches}/>
         </Grid>
     )
 }

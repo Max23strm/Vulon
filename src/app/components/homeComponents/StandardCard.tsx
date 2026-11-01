@@ -48,7 +48,7 @@ const StandardCard = ({ type, data }: Props) => {
     if(type === 'event' && data !== null ) {
         const { summary, start, location, status } : UpcomingEvent = data
         if( status === '') {
-            return  <ErrorAlert errorMessage={"Error obteniendo fechas"}/>
+            return  <ErrorAlert errorMessage={"error_obtaining_events"}/>
         }
         return ( <Link href="/dashboard/organization/events">
             <Card
