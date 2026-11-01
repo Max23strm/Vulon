@@ -12,7 +12,7 @@ export const fetchUsers = async (): StandardResponsePromise<userGeneral[]> => {
                 'Authorization': `Bearer ${authToken?.split('=')[1]}`,
             },
         })
-        console.log(response)
+
         const result = await response.json();
         if(!result.success)  throw new Error(result.error)
 
