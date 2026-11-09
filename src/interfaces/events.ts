@@ -27,6 +27,22 @@ export interface GoogleEventsResponse {
     errors?: string
 }
 
+
+
+export interface Event {
+    event_uid:        string;
+    event_type_uid:   string;
+    date_start:       string;
+    date_end:         string;
+    time_zone:        string;
+    event_name:       string;
+    type_name:        string;
+    event_state:      string;
+    event_state_type: number;
+}
+
+
+
 export interface GoogleEvent {
     end:        Date;
     event_type: string;
