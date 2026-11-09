@@ -24,6 +24,7 @@
         "back_home":"Back home",
         "error_obtaining_details":"Error obtaining details",
         "error_fetching_data":"Error obtaining data",
+        "no_events_planned":"No events planned",
         "error_obtaining_events":"Error obtaining events",
         "error_obtaining_information":"Error obtaining information",
         "not_found_body":"The page you are looking for does not exists",
@@ -43,6 +44,11 @@
         "select_entity":"Select the entity you would like to access",
         "title": "Welcome!",
         "user": "User",
+        "validate_credentials" : "Validate your credentials"
+    },
+    "Events": {
+        "no_event_configured": "No event configured",
+        "next_event": "Following event",
         "validate_credentials" : "Validate your credentials"
     },
     "Teams": {

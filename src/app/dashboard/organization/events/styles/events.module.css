@@ -1,5 +1,31 @@
 
 
+.header_body{
+    background: var(--mantine-primary-color-light);
+    .next_event{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .titles {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .details{
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+            }
+        }
+        .time{
+            padding: 16px 20px;
+            background-color: var(--mantine-primary-color-filled);
+            color: var(--mantine-primary-color-contrast);
+            border-radius: var(--mantine-radius-lg);
+        }
+    }
+}
+
 .card_column{
     display:flex;
     flex-direction:column;

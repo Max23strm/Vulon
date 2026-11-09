@@ -1,5 +1,5 @@
 'use client'
-import { GoogleEvent, GoogleEventsResponse } from '@/interfaces/events';
+import { Event, GoogleEvent, GoogleEventsResponse } from '@/interfaces/events';
 import { Alert, Card, Container, Grid, GridCol, Skeleton, Stack } from '@mantine/core';
 import MainCalendar from './MainCalendar';
 import dayjs from 'dayjs';
@@ -9,83 +9,70 @@ import styles from '../styles/events.module.css'
 import { DangerOctagon } from '@mynaui/icons-react';
 import { eventsGeneralFetch } from '@/helpers/dataFetcherClient';
 import { useMediaQuery } from '@mantine/hooks';
+import NextEventHeader from './NextEventHeader';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-const MainComponent = () => {
+const MainComponent = ({events} : {events: Event[]}) => {
     const matches = useMediaQuery("(min-width: 1050px)");
-
-    const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"))
-    const [dateResponse, setDateResponse] = useState<GoogleEventsResponse | null>(null)
-    const [isLoading, setisLoading] = useState(true)
+    const tAlerts = useTranslations('Alerts')
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
     const changeDate = (newDate: string) => {
-        setDate(dayjs(newDate).format("YYYY-MM-DD"))
-    }
-
-    const handleFetch = useCallback( async ()=>{
-        setisLoading(true)
-        const response = await eventsGeneralFetch(date); 
-        setDateResponse(response)
-        setisLoading(false)
-    },[date])
-
-    useEffect(()=>{
-        handleFetch()
-    },[handleFetch])
-
-    if(dateResponse !== null) {
-        const {isSuccess, events, errors, mensaje} = dateResponse
-        if(!isSuccess) {
-            return <Alert variant="light" color="red" title="Error obteniendo información" withCloseButton={false} icon={<DangerOctagon/>}>
-                {errors?.length ? errors : mensaje}
-            </Alert>
+        const params = new URLSearchParams(searchParams.toString())
+        
+        if (newDate) {
+            const date = dayjs(newDate).format('YYYY-MM-DD')
+            params.set('date', date)
+        } else {
+            params.delete('date')
         }
-    
-        return (
-            <Container fluid >
-                <Grid>
-                    { 
-                        !matches &&
-                            <GridCol span={{base:12}}>
-                                <Card shadow="xs" padding="lg" radius="md" withBorder className={styles.calendar_card}>
-                                    <MainCalendar 
-                                        events={events}
-                                        monthChange= {changeDate}
-                                    />
-                                </Card>
-                            </GridCol>
-                    }
-                    <GridCol span={{base:12, md:7}} className={styles.card_column}>
-                        {
-                            isLoading ?
-                                <Stack>
-                                    <Skeleton height={90} radius="lg" />
-                                    <Skeleton height={90} radius="lg" />
-                                    <Skeleton height={90} radius="lg" />
-                                    <Skeleton height={90} radius="lg" />
-                                    <Skeleton height={90} radius="lg" />
-                                </Stack>:
-                                events === null || !events?.length ?
-                                    <Alert variant="light" color="cyan" title="Sin datos para mostrar" withCloseButton={false} icon={<DangerOctagon/>}>
-                                        Este mes no tiene eventos configurados
-                                    </Alert>:
-                                    events.map( (e : GoogleEvent) => ( <EventsListCard event={e} key={e.google_id}/> ))
-                        }
-                    </GridCol>
-                    { 
-                        matches &&
-                            <GridCol span={{base:5}}>
-                                <Card shadow="xs" padding="lg" radius="md" withBorder className={styles.calendar_card}>
-                                    <MainCalendar 
-                                        events={events}
-                                        monthChange= {changeDate}
-                                    />
-                                </Card>
-                            </GridCol>
-                    }
-                </Grid>
-            </Container>
-        )
+
+        const query = params.toString()
+        router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
     }
 
+
+    return (
+        <Container fluid >
+            <Grid>
+                <NextEventHeader/>
+                { 
+                    !matches &&
+                        <GridCol span={{base:12}}>
+                            <Card shadow="xs" padding="lg" radius="md" withBorder className={styles.calendar_card}>
+                                <MainCalendar 
+                                    events={events}
+                                    monthChange= {changeDate}
+                                />
+                            </Card>
+                        </GridCol>
+                }
+                <GridCol span={{base:12, md:7}} className={styles.card_column}>
+                    {
+                        
+                        !events?.length ?
+                            <Alert variant="light" color="entitySecondary" title={tAlerts('no_events_planned')} withCloseButton={false} icon={<DangerOctagon/>}/> :
+                            
+                            events.map( (e : Event) => ( <EventsListCard event={e} key={e.event_uid}/> ))
+                    }
+                </GridCol>
+                { 
+                    matches &&
+                        <GridCol span={{base:5}}>
+                            <Card shadow="xs" padding="lg" radius="md" withBorder className={styles.calendar_card}>
+                                <MainCalendar 
+                                    events={events}
+                                    monthChange= {changeDate}
+                                />
+                            </Card>
+                        </GridCol>
+                }
+            </Grid>
+        </Container>
+    )
 }
+
 
 export default MainComponent
