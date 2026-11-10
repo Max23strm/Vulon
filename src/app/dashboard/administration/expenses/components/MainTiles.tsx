@@ -9,7 +9,6 @@ import { ExpensesInfo } from "@/interfaces/expenses";
 const MainTiles = ({headerInfo}: {headerInfo:ExpensesInfo | null}) => {
   const format = useFormatter();
   const currency_code = useAppState((state) => state.entity.currency_code);
-  console.log({headerInfo})
   const t = useTranslations("Payments");
   if (!currency_code) return;
 

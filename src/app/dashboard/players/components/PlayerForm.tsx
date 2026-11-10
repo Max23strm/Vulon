@@ -36,7 +36,6 @@ const PlayerForm = ({player_info, page, player_uid, handleClose} : formInterface
     const t = useTranslations('Players')
     
     const hanleResponse = (res : any) => {
-        console.log(res)
         if(res.success) {
             notifications.show({
                 title: 'Éxito',

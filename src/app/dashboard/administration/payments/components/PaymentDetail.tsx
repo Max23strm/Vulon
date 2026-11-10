@@ -25,7 +25,6 @@ const PaymentDetail = ({payment_uid,}:{payment_uid: string}) => {
             setIsLoading(true)
             setError(false)
             const paymentRes = await paymentsDetailFetch(payment_uid)
-            console.log(paymentRes)
             if(!paymentRes.success)  {
                 setError(true)
             }

@@ -37,8 +37,10 @@ const page = async ({searchParams}:{searchParams:Promise<{date:string}>}) => {
 
     const  eventData = currentData[0].status === 'fulfilled' ? currentData[0].value.data as Event[] : []
     
+
+
     return (
-        <MainComponent events={eventData}/>
+        <MainComponent events={eventData.sort((a, b) => dayjs(a.date_start).diff(dayjs(b.date_start)))}/>
     )
 }
 

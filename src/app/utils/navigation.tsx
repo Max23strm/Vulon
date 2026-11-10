@@ -1,4 +1,4 @@
-import { UsersGroup, FolderKanban, FolderTwo, Home } from "@mynaui/icons-react";
+import { UsersGroup, FolderKanban, FolderTwo, Home, Users  } from "@mynaui/icons-react";
 import { JSX } from "react/jsx-runtime";
 export type NavElement = {
     name: string,
@@ -11,6 +11,7 @@ export const navElements: NavElement[] = [
     {
         name: "home",
         href: "/dashboard/home",
+        icon: <Home  size={16} stroke={1.5} />,
         children: [],
     },
     {
@@ -22,7 +23,7 @@ export const navElements: NavElement[] = [
     {
         name: "players",
         href: "/dashboard/players",
-        icon: <UsersGroup size={16} stroke={1.5} />,
+        icon: <Users size={16} stroke={1.5} />,
         children: [{ name: "all", href: "/dashboard/players",  }],
     },
     {

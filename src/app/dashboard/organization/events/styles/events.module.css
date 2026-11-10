@@ -1,3 +1,47 @@
+.calendar_section{
+    position: relative;
+}
+
+.card {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 110px;
+    div{
+        z-index: 20;
+    }
+}
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+        350deg,
+        var(--gradient) 15%,
+        var(--mantine-color-white) 55%
+    );
+    transform: translate(20%, 100%);
+    transition: all 0.4s ease;
+}
+[data-mantine-color-scheme="dark"] .card::before {
+    background: linear-gradient(
+        350deg,
+        var(--gradient),
+        var(--mantine-color-dark-6) 55%
+    );
+}
+
+.card:hover::before {
+    transform: translate(00%, 20%);
+
+}
+
 
 
 .header_body{
@@ -35,14 +79,20 @@
 .calendar_card{
     justify-content: center;
     align-items: center;
+    position: sticky;
+    top: 20;
 }
 
 .card_body{
-    justify-content: center;
+    width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: row;
     align-items: center;
 }
 
-.card_firt{
-    width:calc(100% - 42px)
-}
 
+
+.hover_day{
+    border: 1px solid red
+}
