@@ -49,6 +49,13 @@
     "Events": {
         "no_event_configured": "No event configured",
         "next_event": "Following event",
+        "scheduled":"Scheduled",
+        "confirmed":"Confirmed",
+        "to_be_defined":"To be defined",
+        "postponed":"Postoned",
+        "rescheduled":"Rescheduled",
+        "finished":"Finished",
+        "suspended":"Suspended",
         "validate_credentials" : "Validate your credentials"
     },
     "Teams": {

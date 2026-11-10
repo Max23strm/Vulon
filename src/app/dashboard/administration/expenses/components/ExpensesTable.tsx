@@ -25,7 +25,6 @@ const ExpensesTable = ({expenses, matches} : {expenses: SimpleExpense[], matches
             </TableTr>
         ));
     }
-    console.log({expenses})
 
     return (
         <GridCol span={{sm:12}}>

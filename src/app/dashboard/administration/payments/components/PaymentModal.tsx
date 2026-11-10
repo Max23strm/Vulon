@@ -31,7 +31,6 @@ const PaymentModal = () => {
             ])
             const err = responses.find(r =>r.status === 'rejected' || !r.value.success)
             if(err) {
-                console.log(err.status === 'rejected' ? err.reason : err.value.error)
                 setErrorFetched(true)
                 setLoading(false)
                 return
@@ -42,7 +41,6 @@ const PaymentModal = () => {
                 paymentCat: responses[2].status === 'fulfilled' ? responses[2]?.value?.data as PaymentCat[] : [],
             })
             setLoading(false)
-            console.log(responses)
         }
     },[opened])
 

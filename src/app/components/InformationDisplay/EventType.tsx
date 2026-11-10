@@ -1,31 +1,12 @@
+import { stringToHexColor } from '@/app/utils/colorRandomizer'
 import { eventTypeName } from '@/interfaces/events'
 import { Badge } from '@mantine/core'
 import React from 'react'
 
-
-const defineColor = (event_name :  eventTypeName | string) : string => {
-
-    switch(event_name){
-        case 'Entrenamiento':
-            return 'cyan'
-        case 'Actividad de integración':
-            return 'grape'
-        case 'Torneo 15s':
-            return 'indigo'
-        case 'Torneo 7s':
-            return 'orange'
-        case 'Torneo 10s':
-            return 'lime'
-        default:
-            return 'gray'
-    }
-}
-
-
 const EventType = ({event} : {event: string}) => {
     
     return (
-        <Badge size='xs' color={ defineColor(event)} >
+        <Badge size='xs' variant='outline' color={ stringToHexColor(event)} >
             {event}
         </Badge>
     )

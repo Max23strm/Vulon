@@ -1,13 +1,12 @@
 'use client'
-import { Event, GoogleEvent, GoogleEventsResponse } from '@/interfaces/events';
-import { Alert, Card, Container, Grid, GridCol, Skeleton, Stack } from '@mantine/core';
+import { Event } from '@/interfaces/events';
+import { Alert, Card, Container, Divider, Grid, GridCol, Skeleton, Stack, Text } from '@mantine/core';
 import MainCalendar from './MainCalendar';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useState } from 'react';
+import { MouseEvent, MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import EventsListCard from './EventsListCard';
 import styles from '../styles/events.module.css'
 import { DangerOctagon } from '@mynaui/icons-react';
-import { eventsGeneralFetch } from '@/helpers/dataFetcherClient';
 import { useMediaQuery } from '@mantine/hooks';
 import NextEventHeader from './NextEventHeader';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
@@ -19,6 +18,11 @@ const MainComponent = ({events} : {events: Event[]}) => {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    const hoverRef = useRef('')
+    const [hovered, setHovered] = useState('')
+    const handleHover = (props: MouseEvent<HTMLDivElement, MouseEvent>, date: string) => {
+        setHovered (props.type === 'mouseenter' ? date : '')
+    }
     const changeDate = (newDate: string) => {
         const params = new URLSearchParams(searchParams.toString())
         
@@ -33,7 +37,23 @@ const MainComponent = ({events} : {events: Event[]}) => {
         router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
     }
 
+    const displayableEvents =  events.reduce((final: { date: string; ev: Event[]; }[], event)=>{
+        const date = dayjs(event.date_start).format('DDMMYYYY')
+        const existingIndex = final.findIndex( obj => obj.date === date)
 
+        if(existingIndex > -1) {
+            final[existingIndex].ev.push(event)
+        } else {
+            final.push({
+                date: date,
+                ev: [event]
+            })
+
+        }
+
+        return final
+    },[])
+    
     return (
         <Container fluid >
             <Grid>
@@ -45,6 +65,7 @@ const MainComponent = ({events} : {events: Event[]}) => {
                                 <MainCalendar 
                                     events={events}
                                     monthChange= {changeDate}
+                                    hoverRef={hovered}
                                 />
                             </Card>
                         </GridCol>
@@ -54,17 +75,22 @@ const MainComponent = ({events} : {events: Event[]}) => {
                         
                         !events?.length ?
                             <Alert variant="light" color="entitySecondary" title={tAlerts('no_events_planned')} withCloseButton={false} icon={<DangerOctagon/>}/> :
-                            
-                            events.map( (e : Event) => ( <EventsListCard event={e} key={e.event_uid}/> ))
+                            displayableEvents.map((d,i )=> (
+                                <Stack gap={5} key={d.date}>
+                                    <Divider my="xs" label={`${dayjs(d.date).format('dddd DD')}`} labelPosition="left" />
+                                    {d.ev.map( (e : Event) => ( <EventsListCard event={e} key={e.event_uid} hoverAction={handleHover}/> ))}
+                                </Stack>
+                            ))
                     }
                 </GridCol>
                 { 
                     matches &&
-                        <GridCol span={{base:5}}>
+                        <GridCol span={{base:5}} className={styles.calendar_section}>
                             <Card shadow="xs" padding="lg" radius="md" withBorder className={styles.calendar_card}>
                                 <MainCalendar 
                                     events={events}
                                     monthChange= {changeDate}
+                                    hoverRef={hovered}
                                 />
                             </Card>
                         </GridCol>

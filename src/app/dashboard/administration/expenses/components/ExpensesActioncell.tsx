@@ -27,7 +27,6 @@ const ExpensesActioncell = ({expense_uid}:{expense_uid:string}) => {
             setIsLoading(true)
             setError(false)
             const paymentRes = await fetchExpenseById(expense_uid)
-            console.log(paymentRes)
             if(!paymentRes.success)  {
                 setError(true)
             }

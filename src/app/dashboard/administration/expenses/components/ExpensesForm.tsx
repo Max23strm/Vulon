@@ -98,7 +98,6 @@ const ExpensesForm = ({ opened, toggle } : {opened: boolean, toggle: ()=>void}) 
             toggle()
             router.refresh()
         } else {
-            console.log(response)
             notifications.show({
                 title: 'Error',
                 message:'Ocurrió un error, intente nuevamente o contate a un administrador',

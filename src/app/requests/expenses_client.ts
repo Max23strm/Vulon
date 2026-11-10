@@ -25,7 +25,6 @@ export const fetchExpensesTypes = async (): StandardResponsePromise<ExpenseType[
             error: null,
         };
     } catch(e) {
-        console.log(e)
         return {
             success: false,
             error: e,
@@ -56,7 +55,6 @@ export const fetchScheduleExpenses = async (): StandardResponsePromise<ScheduleE
             error: null,
         };
     } catch(e) {
-        console.log(e)
         return {
             success: false,
             error: e,
@@ -88,7 +86,6 @@ export const fetchExpenseById = async (expense_uid: string): StandardResponsePro
             error: null,
         };
     } catch(e) {
-        console.log(e)
         return {
             success: false,
             error: e,
@@ -98,7 +95,6 @@ export const fetchExpenseById = async (expense_uid: string): StandardResponsePro
 }
 
 export const postExpensesForm = async (formValues: any) => {
-    console.log(formValues)
     try {
         const cookies = document.cookie.split('; ');
         const authToken = cookies.find(cookie => cookie.startsWith('authToken'))
