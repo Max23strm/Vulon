@@ -1,5 +1,16 @@
 .calendar_section{
     position: relative;
+    display: none;
+    @media (min-width: 993px) {
+        display: block;
+    }
+}
+.small_calendar_card{
+    position: relative;
+    display: none;
+    @media (max-width: 993px) {
+        display: block;
+    }
 }
 
 .card {
@@ -23,7 +34,7 @@
     pointer-events: none;
     background: linear-gradient(
         350deg,
-        var(--gradient) 15%,
+        var(--gradient) ,
         var(--mantine-color-white) 55%
     );
     transform: translate(20%, 100%);

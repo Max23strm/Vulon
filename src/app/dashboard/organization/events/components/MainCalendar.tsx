@@ -7,10 +7,11 @@ import styles from '../styles/events.module.css'
 import { Event, GoogleEvent } from '@/interfaces/events';
 import { stringToHexColor } from '@/app/utils/colorRandomizer';
 import { RefObject } from 'react';
+import { useLocale } from 'next-intl';
 const MainCalendar = ({ events, monthChange, hoverRef }: {events:Event[], monthChange: (newDate: string)=> void, hoverRef: string}) => {
-    console.log(hoverRef)
+    const locale = useLocale()
     return (
-        <DatesProvider settings={{ locale: 'es', firstDayOfWeek: 1, weekendDays: [0],  }}>
+        <DatesProvider settings={{ locale: locale, firstDayOfWeek: 1, weekendDays: [0],  }}>
             <Calendar
                 hideOutsideDates={true}
                 onMonthSelect={(date)=>{monthChange(date)}}

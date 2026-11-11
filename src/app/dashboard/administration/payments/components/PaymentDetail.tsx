@@ -7,7 +7,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react'
 import styles from '../styles/payments.module.css'
 import { useAppState } from '@/app/providers/StateProvider';
-import dayjs from 'dayjs';
+import dayjs from '@/helpers/dayjs';
 
 const PaymentDetail = ({payment_uid,}:{payment_uid: string}) => {
     const t = useTranslations('Payments')

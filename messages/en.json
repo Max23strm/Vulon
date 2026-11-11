@@ -52,6 +52,7 @@
         "scheduled":"Scheduled",
         "confirmed":"Confirmed",
         "to_be_defined":"To be defined",
+        "new_event":"New event",
         "postponed":"Postoned",
         "rescheduled":"Rescheduled",
         "finished":"Finished",

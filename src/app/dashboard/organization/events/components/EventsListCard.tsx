@@ -1,5 +1,5 @@
 import { Event } from '@/interfaces/events'
-import { Card, Group, lighten, Stack, Text } from '@mantine/core'
+import { alpha, Card, Group, lighten, Stack, Text } from '@mantine/core'
 import dayjs from '@/helpers/dayjs'
 import styles from '../styles/events.module.css'
 import { stringToHexColor } from '@/app/utils/colorRandomizer'
@@ -19,8 +19,8 @@ const EventsListCard = ({event, hoverAction }:{event: Event, hoverAction: any}) 
 
 
     return (
-        <Card shadow="xs" padding="lg" radius="md" withBorder key={event.event_uid}  className={styles.card}
-            style={{ '--gradient': stringToHexColor(event.type_name) } as React.CSSProperties}
+        <Card shadow="xs" padding="lg" radius="md" key={event.event_uid}  className={styles.card}
+            style={{ '--gradient': alpha(stringToHexColor(event.type_name), .5) } as React.CSSProperties}
             onMouseEnter={(props)=>hoverAction(props, event.date_start)} onMouseLeave={(props)=>hoverAction(props, null)}
         >
             <Group justify="space-between" className={styles.card_body}>

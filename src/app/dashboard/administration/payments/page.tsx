@@ -1,7 +1,7 @@
 import { Container } from '@mantine/core'
 import styles from './styles/payments.module.css'
 import TableAndSelector from './components/TableAndSelector';
-import dayjs from 'dayjs';
+import dayjs from '@/helpers/dayjs';
 import { connection } from 'next/server';
 import { fetchMonthlyPaymentsStats, fetchPaymentsGeneral } from '@/app/requests/payments';
 import ErrorAlert from '@/app/components/InformationDisplay/ErrorAlert';
