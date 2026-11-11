@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 import React from 'react'
 import PlayerForm from './PlayerForm'
 import { playersDetailResponse } from '@/interfaces/players'
-import dayjs from 'dayjs'
+import dayjs from '@/helpers/dayjs'
 import styles from '../new-player/styles/playerDetail.module.css'
 
 const PlayerNewModal = ({isOpen, handleClose}: {isOpen: boolean, handleClose: ()=>void}) => {

@@ -21,7 +21,9 @@ const MantineMainProvider = ({ children }: { children: React.ReactNode }) => {
         entitySecondary: entitySecondaryCol,
         entityTertiary: entityTertiaryCol,
     },
-    primaryColor: 'entityPrimary'
+    primaryColor: 'entityPrimary',
+    defaultRadius: 'lg',
+    autoContrast: true
   });
 
   return (

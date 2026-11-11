@@ -1,26 +1,33 @@
-import { NextRequest, NextResponse } from "next/server";
-
-const PUBLIC_PATHS = ['/login', '/forgot-password'];
+import { NextRequest, NextResponse } from 'next/server';
+import { detectLocale, isLocale } from './i18n/locale';
 
 export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const token = request.cookies.get('authToken')?.value;
-  const pathname = request.nextUrl.pathname;
 
-  // Allow public paths without auth
-  if (PUBLIC_PATHS.includes(pathname)) {
-    return NextResponse.next();
+  const response =
+    pathname.startsWith('/dashboard') && !token
+      ? NextResponse.redirect(new URL('/login', request.url))
+      : NextResponse.next();
+
+  const savedLocale = request.cookies.get('locale')?.value;
+
+  if (!isLocale(savedLocale)) {
+    response.cookies.set(
+      'locale',
+      detectLocale(request.headers.get('accept-language')),
+      {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    );
   }
 
-  if (!token) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname); // Optional: redirect back after login
-    return NextResponse.redirect(loginUrl);
-  }
-
-  // Continue if authenticated
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'], // protect private routes only
-}
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};

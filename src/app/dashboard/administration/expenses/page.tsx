@@ -1,6 +1,6 @@
 import { Container } from '@mantine/core'
 import FullPage from './components/FullPage'
-import dayjs from 'dayjs';
+import dayjs from '@/helpers/dayjs';
 import { connection } from 'next/server';
 import ErrorAlert from '@/app/components/InformationDisplay/ErrorAlert';
 import { fetchExpensesInfo, fetchMonthlyExpenses } from '@/app/requests/expenses';

@@ -3,7 +3,7 @@ import styles from "../../payments/styles/payments.module.css";
 import { Card, Divider, GridCol, Text } from "@mantine/core";
 import { useFormatter, useTranslations } from "next-intl";
 import { useAppState } from "@/app/providers/StateProvider";
-import dayjs from "dayjs";
+import dayjs from '@/helpers/dayjs';
 import { ExpensesInfo } from "@/interfaces/expenses";
 
 const MainTiles = ({headerInfo}: {headerInfo:ExpensesInfo | null}) => {

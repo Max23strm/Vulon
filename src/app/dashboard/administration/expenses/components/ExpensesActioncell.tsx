@@ -6,7 +6,7 @@ import { FileText, FileTextSolid } from '@mynaui/icons-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import React, { useCallback, useEffect, useState } from 'react'
 import styles from '../styles/expenses.module.css'
-import dayjs from 'dayjs'
+import dayjs from '@/helpers/dayjs'
 import { ExpenseDetail } from '@/interfaces/expenses'
 import { useAppState } from '@/app/providers/StateProvider'
 

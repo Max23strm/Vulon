@@ -1,5 +1,5 @@
 import { PaymentReport } from "@/interfaces/reports";
-import dayjs from "dayjs";
+import dayjs from "@/helpers/dayjs";
 
 export const postPaymentsResponse = async ( formValues: PaymentReport ) : Promise<{ isSuccess: boolean, estado?:string, error?:unknown, player_uid?: string } | void>  => {
 

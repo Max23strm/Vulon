@@ -4,12 +4,14 @@ import dayjs from '@/helpers/dayjs'
 import StandardCard from "../../components/homeComponents/StandardCard";
 import { connection } from "next/server";
 import { fetchHomeDashboard } from "@/app/requests/dashboard";
+import { getLocale } from 'next-intl/server';
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
 export const instant = false;
 export default async function Home() {
   await connection()
+  const locale = await getLocale();
   const currentDate = dayjs().format("YYYY-MM-DD")
   const { data, error, success } = await fetchHomeDashboard(currentDate);
   
@@ -25,7 +27,7 @@ return <Container fluid>
     <Grid>
       <GridCol span={{ base: 12}}>
         <Text c='primary-pitz'  fw={700} size="xl" ta={'end'}>
-          {dayjs().format("MMMM YYYY").toUpperCase()}
+          {dayjs().locale(locale).format("MMMM YYYY").toUpperCase()}
         </Text>
       </GridCol>
       <GridCol span={{ base: 12}}>
